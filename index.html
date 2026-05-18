@@ -1187,6 +1187,28 @@ function generateReport() {
         customAlert('Veuillez remplir les champs obligatoires : ' + missing.join(', '));
         document.getElementById(!storeNameVal ? 'store-name' : 'inspector').focus(); return;
     }
+    var missingItems = [];
+    Object.keys(DATA).forEach(function(catKey) {
+        var cat = DATA[catKey];
+        cat.items.forEach(function(item) {
+            var checked = document.querySelector('input[name="' + item.id + '"]:checked');
+            if (!checked) missingItems.push({ cat: cat.name, label: item.label });
+        });
+    });
+    if (missingItems.length > 0) {
+        var byCat = {};
+        missingItems.forEach(function(m) {
+            if (!byCat[m.cat]) byCat[m.cat] = [];
+            byCat[m.cat].push(m.label);
+        });
+        var msg = 'Tous les points de contrôle doivent être validés (Conforme ou Non conforme) avant de générer le rapport.\n\nPoints manquants :\n';
+        Object.keys(byCat).forEach(function(cat) {
+            msg += '\n📋 ' + cat + ' :\n• ' + byCat[cat].join('\n• ');
+        });
+        customAlert(msg);
+        return;
+    }
+
     var missingComments = [];
     Object.keys(DATA).forEach(function(catKey) { DATA[catKey].items.forEach(function(item) {
         var nc = document.querySelector('input[name="' + item.id + '"][value="NC"]');
@@ -1615,6 +1637,8 @@ function openMailClient() {
 
 function resetForm() {
     customConfirm('Réinitialiser tout le formulaire ?').then(function(ok) { if (!ok) return;
+    return customConfirm('⚠️ Cette action est irréversible. Toutes les données du contrôle en cours seront perdues.\n\nÊtes-vous vraiment sûr ?');
+    }).then(function(ok) { if (!ok) return;
     document.querySelectorAll('input[type="radio"]').forEach(function(r) { r.checked = false; });
     document.querySelectorAll('.comment-field').forEach(function(c) { c.classList.remove('open','required'); });
     document.querySelectorAll('.comment-field textarea').forEach(function(t) { t.value = ''; });
