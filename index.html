@@ -1255,6 +1255,54 @@ function updateScores() {
     document.getElementById('header-pct').textContent = totalAll > 0 ? Math.round(conformeAll / totalAll * 100) + '%' : '—';
 }
 
+function generateAutoComment(pct, verdict, totalC, totalNC, evaluated, nonConformes, storeName, inspector, dateStr) {
+    var txt = '';
+
+    // Introduction avec verdict
+    if (pct >= 80) {
+        txt += 'Le contrôle de l\'établissement ' + storeName + ' est globalement satisfaisant avec un score de conformité de ' + pct + '% (' + totalC + '/' + evaluated + ' points conformes). ';
+    } else if (pct >= 50) {
+        txt += 'Le contrôle de l\'établissement ' + storeName + ' révèle un niveau de conformité insuffisant avec un score de ' + pct + '% (' + totalC + '/' + evaluated + ' points conformes). Des améliorations significatives sont nécessaires. ';
+    } else {
+        txt += 'Le contrôle de l\'établissement ' + storeName + ' révèle un niveau de conformité critique avec un score de ' + pct + '% (' + totalC + '/' + evaluated + ' points conformes). Une mise en conformité urgente est exigée. ';
+    }
+
+    if (totalNC === 0) {
+        txt += 'Aucune non-conformité n\'a été relevée. L\'établissement respecte l\'ensemble des standards PIZZ\'ALIF. Félicitations à l\'équipe.';
+        return txt;
+    }
+
+    txt += totalNC + ' non-conformité' + (totalNC > 1 ? 's' : '') + ' ' + (totalNC > 1 ? 'ont été relevées' : 'a été relevée') + '.\n\n';
+
+    // Regrouper les NC par catégorie
+    var ncByCat = {};
+    nonConformes.forEach(function(nc) {
+        if (!ncByCat[nc.cat]) ncByCat[nc.cat] = [];
+        ncByCat[nc.cat].push(nc);
+    });
+
+    // Points critiques par catégorie
+    txt += 'Points critiques :\n';
+    Object.keys(ncByCat).forEach(function(cat) {
+        txt += '\n' + cat + ' (' + ncByCat[cat].length + ' NC) :\n';
+        ncByCat[cat].forEach(function(nc) {
+            txt += '- ' + nc.label + '\n';
+        });
+    });
+
+    // Conclusion
+    txt += '\n';
+    if (pct >= 80) {
+        txt += 'Malgré ces quelques points à corriger, l\'établissement maintient un bon niveau général. Les corrections doivent être apportées dans les meilleurs délais.';
+    } else if (pct >= 50) {
+        txt += 'L\'établissement doit impérativement corriger ces non-conformités dans un délai de 15 jours. Un contrôle de suivi sera programmé pour vérifier la mise en conformité.';
+    } else {
+        txt += 'ATTENTION : Le nombre de non-conformités est critique. L\'établissement doit prendre des mesures correctives immédiates sur l\'ensemble des points relevés. Un contrôle de suivi sera programmé sous 7 jours.';
+    }
+
+    return txt;
+}
+
 function generateReport() {
     var storeNameVal = document.getElementById('store-name').value.trim();
     var inspectorVal = document.getElementById('inspector').value.trim();
@@ -1319,7 +1367,6 @@ function generateReport() {
     var inspector = document.getElementById('inspector').value || 'Non renseigné';
     var ctrlDate = document.getElementById('ctrl-date').value;
     var ctrlTime = document.getElementById('ctrl-time').value || '';
-    var globalComment = document.getElementById('global-comment').value;
     var dateStr = ctrlDate ? new Date(ctrlDate + 'T00:00:00').toLocaleDateString('fr-FR', { weekday:'long', year:'numeric', month:'long', day:'numeric' }) : new Date().toLocaleDateString('fr-FR', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 
     var totalC = 0, totalNC = 0, totalItems = 0, nonConformes = [];
@@ -1377,6 +1424,10 @@ function generateReport() {
     var globalCls = globalPct >= 80 ? 'good' : globalPct >= 50 ? 'warn' : 'bad';
     var verdict = globalPct >= 80 ? 'CONFORME' : globalPct >= 50 ? 'À AMÉLIORER' : 'NON CONFORME';
     var clr2 = globalCls === 'good' ? 'green' : globalCls === 'warn' ? 'orange' : 'red';
+
+    // Auto-generate global comment
+    var globalComment = generateAutoComment(globalPct, verdict, totalC, totalNC, evaluated, nonConformes, storeName, inspector, dateStr);
+    document.getElementById('global-comment').value = globalComment;
 
     var html = '<div style="background:white;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden">' +
         '<div class="rpt-header"><div style="font-size:28px;font-weight:900;letter-spacing:1px;margin-bottom:4px">PIZZ\'ALIF</div><h2>Rapport de Contrôle Franchise</h2><p>' + storeName + (storeAddr ? ' — ' + storeAddr : '') + (storeSiren ? ' — SIREN : ' + storeSiren : '') + '</p></div>' +
@@ -1755,7 +1806,7 @@ var DEFAULT_STORES = [
     { value:"Roanne", display:"PIZZ'ALIF Roanne (4D Food)", addr:"55 Cours de la République, 42300 Roanne", siren:"934323312" },
     { value:"Bellevue", display:"PIZZ'ALIF Bellevue", addr:"92 Rue des Docteurs Charcot, 42100 Saint-Étienne", siren:"983387630" },
     { value:"Clermont-Ferrand", display:"PIZZ'ALIF Clermont-Pardieu", addr:"6-8 Boulevard Robert Schuman, 63000 Clermont-Ferrand", siren:"934669748" },
-    { value:"Montpellier", display:"PIZZ'ALIF Montpellier", addr:"10 Rue Boussairolles, 34000 Montpellier", siren:"940590458" },
+    { value:"Le-Puy-en-Velay", display:"PIZZ'ALIF Le Puy-en-Velay (Y2 Restauration)", addr:"76 Avenue Charles Dupuy, 43700 Brives-Charensac", siren:"99534434800017" },
     { value:"Saint-Priest", display:"PIZZ'ALIF Saint-Priest (F&K Family Foods)", addr:"42 B Rue Henri Maréchal, 69800 Saint-Priest", siren:"940344419" }
 ];
 var DEFAULT_INSPECTORS = ["FAYED GHANI","TRABELSI ACHRAF","GUELALTA ABDELRHANY","BOUDJEMAI SOFIANE","KARIM BOUDJEMAI"];
