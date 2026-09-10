@@ -82,6 +82,26 @@
         .cat-icon { margin-right: 8px; }
         .chevron { transition: transform .2s; font-size: 12px; color: #fff; }
         .category.open .chevron { transform: rotate(180deg); }
+        .cat-toggle { display: flex; align-items: center; gap: 6px; cursor: pointer; flex: 0 0 auto; }
+        .cat-toggle input { display: none; }
+        .cat-toggle .switch { width: 34px; height: 18px; border-radius: 20px; background: #6b6b6b; position: relative; transition: background .2s; }
+        .cat-toggle .switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform .2s; }
+        .cat-toggle input:checked + .switch { background: var(--green); }
+        .cat-toggle input:checked + .switch::after { transform: translateX(16px); }
+        .cat-toggle .switch-label { font-size: 10px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; color: #fff; opacity: .75; min-width: 62px; }
+        .category.cat-off { opacity: .5; }
+        .category.cat-off .category-body { display: none !important; }
+        .category.cat-off .chevron { visibility: hidden; }
+        .item-toggle { display: flex; align-items: center; gap: 5px; cursor: pointer; flex: 0 0 auto; margin-right: 6px; }
+        .item-toggle input { display: none; }
+        .item-toggle .switch { width: 30px; height: 16px; border-radius: 20px; background: #c4c4c4; position: relative; transition: background .2s; }
+        .item-toggle .switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: #fff; transition: transform .2s; }
+        .item-toggle input:checked + .switch { background: var(--green); }
+        .item-toggle input:checked + .switch::after { transform: translateX(14px); }
+        .item-toggle .switch-label { font-size: 9px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; color: #777; min-width: 52px; }
+        .check-item.item-off { opacity: .45; }
+        .check-item.item-off .radio-group, .check-item.item-off .comment-btn { pointer-events: none; opacity: .35; }
+        .comment-field.item-off-field { display: none !important; }
         .category .check-item { border-left: 3px solid #555; padding-left: 12px; margin: 6px 0; border-radius: 6px; background: linear-gradient(90deg, #f5f5f5 0%, white 20%); }
         .category { border: 1px solid #444; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
         .category .cat-score { color: #fff; }
@@ -450,7 +470,7 @@
     <div class="category" data-cat="service">
         <div class="category-header" onclick="togCat(this)">
             <h3><span class="cat-icon">🤝</span> Service & Expérience client</h3>
-            <div style="display:flex;align-items:center;gap:8px"><span class="cat-score neutral" data-score>— / 12</span><span class="chevron">▼</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><span class="cat-score neutral" data-score>— / 13</span><span class="chevron">▼</span></div>
         </div>
         <div class="category-body">
             <div class="check-list" id="list-service"></div>
@@ -461,7 +481,7 @@
     <div class="category" data-cat="hygiene">
         <div class="category-header" onclick="togCat(this)">
             <h3><span class="cat-icon">🧹</span> Hygiène & Propreté</h3>
-            <div style="display:flex;align-items:center;gap:8px"><span class="cat-score neutral" data-score>— / 7</span><span class="chevron">▼</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><span class="cat-score neutral" data-score>— / 9</span><span class="chevron">▼</span></div>
         </div>
         <div class="category-body">
             <div class="check-list" id="list-hygiene"></div>
@@ -469,25 +489,47 @@
         </div>
     </div>
 
-    <div class="category" data-cat="process">
+    <div class="category" data-cat="tacos">
         <div class="category-header" onclick="togCat(this)">
-            <h3><span class="cat-icon">📋</span> Respect des process PIZZ'ALIF</h3>
-            <div style="display:flex;align-items:center;gap:8px"><span class="cat-score neutral" data-score>— / 16</span><span class="chevron">▼</span></div>
+            <h3><span class="cat-icon">🌯</span> Coin tacos</h3>
+            <div style="display:flex;align-items:center;gap:8px"><span class="cat-score neutral" data-score>— / 15</span><span class="chevron">▼</span></div>
         </div>
         <div class="category-body">
-            <div class="check-list" id="list-process"></div>
-            <div class="add-row"><input type="text" id="add-input-process" placeholder="Ajouter un point de contrôle..." onkeydown="if(event.key==='Enter')addItem('process')"><button class="add-btn" onclick="addItem('process')">+ Ajouter</button></div>
+            <div class="check-list" id="list-tacos"></div>
+            <div class="add-row"><input type="text" id="add-input-tacos" placeholder="Ajouter un point de contrôle..." onkeydown="if(event.key==='Enter')addItem('tacos')"><button class="add-btn" onclick="addItem('tacos')">+ Ajouter</button></div>
         </div>
     </div>
 
-    <div class="category" data-cat="cuisine">
+    <div class="category" data-cat="pizzas">
         <div class="category-header" onclick="togCat(this)">
-            <h3><span class="cat-icon">🍳</span> Cuisine</h3>
-            <div style="display:flex;align-items:center;gap:8px"><span class="cat-score neutral" data-score>— / 10</span><span class="chevron">▼</span></div>
+            <h3><span class="cat-icon">🍕</span> Coin pizzas</h3>
+            <div style="display:flex;align-items:center;gap:8px"><span class="cat-score neutral" data-score>— / 9</span><span class="chevron">▼</span></div>
         </div>
         <div class="category-body">
-            <div class="check-list" id="list-cuisine"></div>
-            <div class="add-row"><input type="text" id="add-input-cuisine" placeholder="Ajouter un point de contrôle..." onkeydown="if(event.key==='Enter')addItem('cuisine')"><button class="add-btn" onclick="addItem('cuisine')">+ Ajouter</button></div>
+            <div class="check-list" id="list-pizzas"></div>
+            <div class="add-row"><input type="text" id="add-input-pizzas" placeholder="Ajouter un point de contrôle..." onkeydown="if(event.key==='Enter')addItem('pizzas')"><button class="add-btn" onclick="addItem('pizzas')">+ Ajouter</button></div>
+        </div>
+    </div>
+
+    <div class="category" data-cat="burgers">
+        <div class="category-header" onclick="togCat(this)">
+            <h3><span class="cat-icon">🍔</span> Coin burgers</h3>
+            <div style="display:flex;align-items:center;gap:8px"><label class="cat-toggle" onclick="event.stopPropagation()" title="Désactivez si l’établissement n’a pas ce poste"><input type="checkbox" id="cat-toggle-burgers" checked onchange="toggleCat('burgers', this.checked)"><span class="switch"></span><span class="switch-label">Présent</span></label><span class="cat-score neutral" data-score>— / 8</span><span class="chevron">▼</span></div>
+        </div>
+        <div class="category-body">
+            <div class="check-list" id="list-burgers"></div>
+            <div class="add-row"><input type="text" id="add-input-burgers" placeholder="Ajouter un point de contrôle..." onkeydown="if(event.key==='Enter')addItem('burgers')"><button class="add-btn" onclick="addItem('burgers')">+ Ajouter</button></div>
+        </div>
+    </div>
+
+    <div class="category" data-cat="desserts">
+        <div class="category-header" onclick="togCat(this)">
+            <h3><span class="cat-icon">🥞</span> Coin desserts</h3>
+            <div style="display:flex;align-items:center;gap:8px"><span class="cat-score neutral" data-score>— / 12</span><span class="chevron">▼</span></div>
+        </div>
+        <div class="category-body">
+            <div class="check-list" id="list-desserts"></div>
+            <div class="add-row"><input type="text" id="add-input-desserts" placeholder="Ajouter un point de contrôle..." onkeydown="if(event.key==='Enter')addItem('desserts')"><button class="add-btn" onclick="addItem('desserts')">+ Ajouter</button></div>
         </div>
     </div>
 
@@ -505,7 +547,7 @@
     <div class="category" data-cat="securite">
         <div class="category-header" onclick="togCat(this)">
             <h3><span class="cat-icon">⚠️</span> Sécurité</h3>
-            <div style="display:flex;align-items:center;gap:8px"><span class="cat-score neutral" data-score>— / 6</span><span class="chevron">▼</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><span class="cat-score neutral" data-score>— / 5</span><span class="chevron">▼</span></div>
         </div>
         <div class="category-body">
             <div class="check-list" id="list-securite"></div>
@@ -666,7 +708,7 @@ var DATA = {
             { id:"sv1", label:"Accueil client chaleureux", corrective:"Rappeler aux équipiers les standards d'accueil PIZZ'ALIF : sourire, salutation systématique, contact visuel. Organiser un briefing équipe sous 48h.", reasons:[{label:"Pas de sourire ni salutation", comment:"Pas de sourire ni salutation à l'entrée du client constaté. Rappeler les standards d'accueil PIZZ'ALIF : sourire, salutation systématique, contact visuel. Briefing équipe sous 48h."}, {label:"Client ignoré", comment:"Client ignoré pendant plusieurs minutes constaté. Rappeler la prise en charge immédiate de chaque client. Briefing équipe sous 48h."}, {label:"Pas de sourire ET client ignoré", comment:"Pas de sourire ET client ignoré constatés. L'accueil est totalement non conforme. Organiser un briefing complet sur les standards d'accueil PIZZ'ALIF sous 48h."}] },
             { id:"sv2", label:"Temps d'attente correct", corrective:"Analyser les causes du retard (organisation, effectif, flux). Mettre en place un chronomètre de suivi et optimiser le poste de préparation.", reasons:[{label:"Attente trop longue (> 15 min)", comment:"Temps d'attente supérieur à 15 minutes constaté. Analyser les causes du retard et optimiser le poste de préparation."}, {label:"File d'attente non gérée", comment:"File d'attente non gérée constatée. Mettre en place une gestion de file et communiquer sur le temps d'attente."}, {label:"Attente longue ET file non gérée", comment:"Attente trop longue ET file non gérée constatées. Analyser les causes, optimiser la préparation et mettre en place un suivi des temps d'attente."}] },
             { id:"sv3", label:"Salle propre et tables désinfectées", corrective:"Mettre en place un passage de nettoyage toutes les 30 minutes en période de service. Compléter la fiche de suivi nettoyage salle.", reasons:[{label:"Salle sale", comment:"Salle sale constatée (miettes, déchets visibles). Nettoyer immédiatement et mettre en place un passage toutes les 30 minutes en service."}, {label:"Tables non désinfectées", comment:"Tables non désinfectées entre les clients constatées. Rappeler le protocole de désinfection systématique entre chaque client."}, {label:"Salle sale ET tables non désinfectées", comment:"Salle sale ET tables non désinfectées constatées. Nettoyer la salle, désinfecter toutes les tables et mettre en place un passage toutes les 30 minutes."}] },
-            { id:"sv4", label:"Toilettes client propres", detail:"Papier toilette, sent bon, savon disponible, sèche-main propre et fonctionnel", corrective:"Rétablir immédiatement le stock (papier, savon, désodorisant). Mettre en place un contrôle toutes les heures avec fiche de passage affichée.", reasons:[{label:"Produits manquants (papier, savon...)", comment:"Produits manquants dans les toilettes client constatés (papier, savon, désodorisant). Rétablir le stock immédiatement."}, {label:"Toilettes sales", comment:"Toilettes client sales constatées. Effectuer un nettoyage complet immédiatement et mettre en place un contrôle toutes les heures."}, {label:"Toilettes sales ET produits manquants", comment:"Toilettes client sales ET produits manquants constatés. Nettoyage complet, rétablir le stock et afficher la fiche de passage."}] },
+            { id:"sv4", label:"Toilettes client propres", detail:"Papier toilette, sent bon, savon disponible, sèche-main propre et fonctionnel. En l’absence de sanitaires personnel : mitigeur automatique ou à pédale, savon automatique, sèche-mains obligatoires", corrective:"Rétablir immédiatement le stock (papier, savon, désodorisant). Mettre en place un contrôle toutes les heures avec fiche de passage affichée.", reasons:[{label:"Produits manquants (papier, savon...)", comment:"Produits manquants dans les toilettes client constatés (papier, savon, désodorisant). Rétablir le stock immédiatement."}, {label:"Toilettes sales", comment:"Toilettes client sales constatées. Effectuer un nettoyage complet immédiatement et mettre en place un contrôle toutes les heures."}, {label:"Toilettes sales ET produits manquants", comment:"Toilettes client sales ET produits manquants constatés. Nettoyage complet, rétablir le stock et afficher la fiche de passage."}] },
             { id:"sv5", label:"Écran dynamique, bornes et caisse", detail:"Tout à jour (prix)", corrective:"Mettre à jour immédiatement les prix et visuels sur l'ensemble des supports (écrans, bornes, caisse). Vérifier la cohérence des tarifs.", reasons:[{label:"Prix non à jour", comment:"Prix non à jour constatés sur les supports (écrans, bornes, caisse). Mettre à jour immédiatement sur tous les supports."}, {label:"Équipement en panne (écran, borne)", comment:"Équipement en panne constaté (écran ou borne). Remettre en service ou faire réparer sous 48h."}, {label:"Prix non à jour ET équipement en panne", comment:"Prix non à jour ET équipement en panne constatés. Mettre à jour les prix et faire réparer le matériel sous 48h."}] },
             { id:"sv6", label:"Présentation des plats conforme", detail:"Plateaux propres, emballages conformes", corrective:"Rappeler les fiches de dressage PIZZ'ALIF à l'équipe. Vérifier le stock d'emballages conformes et commander si nécessaire.", reasons:[{label:"Plateau sale ou abîmé", comment:"Plateau sale ou abîmé constaté. Remplacer les plateaux défectueux et rappeler le nettoyage systématique."}, {label:"Emballage non conforme", comment:"Emballage non conforme PIZZ'ALIF constaté. Vérifier le stock d'emballages conformes et commander si nécessaire."}, {label:"Plateau sale ET emballage non conforme", comment:"Plateau sale ET emballage non conforme constatés. Remplacer les plateaux et remettre en stock les emballages conformes."}] },
             { id:"sv7", label:"Boissons et accompagnements à bonne température", corrective:"Vérifier le réglage des réfrigérateurs à boissons et ajuster la température. S'assurer que les boissons sont stockées suffisamment longtemps avant service.", reasons:[{label:"Boissons tièdes", comment:"Boissons tièdes constatées. Vérifier le réglage du réfrigérateur et ajuster la température."}, {label:"Réfrigérateur mal réglé", comment:"Réfrigérateur à boissons mal réglé constaté. Ajuster la température immédiatement."}, {label:"Boissons tièdes ET réfrigérateur mal réglé", comment:"Boissons tièdes ET réfrigérateur mal réglé constatés. Ajuster la température et vérifier le thermostat."}] },
@@ -687,38 +729,73 @@ var DATA = {
             { id:"hy4", label:"Lave-mains propre, distributeur à savon fonctionnel et essuie-main", corrective:"Remettre en état le poste de lavage des mains immédiatement : recharger savon, essuie-mains, nettoyer le lavabo. Vérifier le stock quotidiennement.", reasons:[{label:"Lave-mains sale", comment:"Lave-mains sale constaté. Nettoyer le lavabo immédiatement."}, {label:"Savon ou essuie-mains manquant", comment:"Savon ou essuie-mains manquant constaté. Recharger immédiatement."}, {label:"Lave-mains sale ET produits manquants", comment:"Lave-mains sale ET produits manquants constatés. Nettoyer et recharger savon et essuie-mains immédiatement."}] },
             { id:"hy5", label:"Poubelles à pédale fermées et propres", corrective:"Nettoyer et désinfecter les poubelles. Remplacer les poubelles défectueuses (pédale cassée, couvercle manquant). Prévoir des sacs poubelle en quantité suffisante.", reasons:[{label:"Poubelle sale", comment:"Poubelle sale constatée. Nettoyer et désinfecter immédiatement."}, {label:"Poubelle défectueuse (pédale, couvercle)", comment:"Poubelle défectueuse constatée (pédale cassée ou couvercle manquant). Remplacer immédiatement."}, {label:"Poubelle sale ET défectueuse", comment:"Poubelle sale ET défectueuse constatées. Nettoyer, désinfecter et remplacer la poubelle."}] },
             { id:"hy6", label:"Vérifier l'utilisation de la tablette hygiène", detail:"Traçabilité effectuée, relevé température, étiquetage effectué", corrective:"Reprendre immédiatement la saisie sur la tablette hygiène : relevés de température, traçabilité, étiquetage. Former le responsable de service à son utilisation quotidienne obligatoire.", reasons:[{label:"Relevés non effectués", comment:"Relevés de température non effectués sur la tablette hygiène constatés. Reprendre immédiatement."}, {label:"Traçabilité et étiquetage non faits", comment:"Traçabilité et étiquetage non enregistrés sur la tablette constatés. Compléter immédiatement."}, {label:"Tablette non utilisée", comment:"Tablette hygiène non utilisée constatée (relevés, traçabilité, étiquetage non faits). Reprendre toutes les saisies et former le responsable."}] },
-            { id:"hy7", label:"Toilettes et lavabos personnel propres", corrective:"Nettoyer immédiatement les sanitaires du personnel. Mettre en place un planning de nettoyage quotidien avec fiche de suivi signée.", reasons:[{label:"Toilettes sales", comment:"Toilettes du personnel sales constatées. Nettoyer immédiatement."}, {label:"Lavabos sales", comment:"Lavabos du personnel sales constatés. Nettoyer immédiatement."}, {label:"Toilettes ET lavabos sales", comment:"Toilettes ET lavabos du personnel sales constatés. Nettoyer l'ensemble des sanitaires et mettre en place un planning quotidien."}] },
+            { id:"hy7", optional:true, label:"Toilettes et lavabos personnel propres", detail:"À désactiver si l’établissement n’a pas de sanitaires dédiés au personnel — dans ce cas les toilettes clients doivent être conformes à un usage personnel : mitigeur automatique ou à pédale, savon automatique, sèche-mains", corrective:"Nettoyer immédiatement les sanitaires du personnel. Mettre en place un planning de nettoyage quotidien avec fiche de suivi signée. En l’absence de sanitaires dédiés, les toilettes clients doivent être équipées d’un mitigeur automatique ou à pédale, d’un distributeur de savon automatique et d’un sèche-mains en état de marche.", reasons:[{label:"Toilettes sales", comment:"Toilettes du personnel sales constatées. Nettoyer immédiatement et mettre en place un planning de nettoyage quotidien."}, {label:"Lavabos sales", comment:"Lavabos du personnel sales constatés. Nettoyer immédiatement."}, {label:"Toilettes ET lavabos sales", comment:"Toilettes ET lavabos du personnel sales constatés. Nettoyer l’ensemble des sanitaires et mettre en place un planning quotidien."}] },
             { id:"hy8", label:"Casiers salariés propres, rangés et en bon état", corrective:"Nettoyer et ranger les casiers. Remplacer les casiers abîmés. Rappeler aux salariés l'obligation de maintenir leur casier propre et rangé.", reasons:[{label:"Casiers sales", comment:"Casiers salariés sales constatés. Nettoyer immédiatement."}, {label:"Casiers mal rangés", comment:"Casiers salariés mal rangés constatés. Ranger immédiatement et rappeler les consignes."}, {label:"Casiers sales ET mal rangés", comment:"Casiers sales ET mal rangés constatés. Nettoyer et ranger immédiatement. Rappeler aux salariés leurs obligations."}] },
             { id:"hy9", label:"Porte-balai fonctionnel, aucun balai au sol", corrective:"Installer ou réparer le porte-balai. Ranger immédiatement tous les balais et accessoires de nettoyage. Aucun matériel ne doit traîner au sol.", reasons:[{label:"Porte-balai absent ou cassé", comment:"Porte-balai absent ou cassé constaté. Installer ou réparer immédiatement."}, {label:"Balais posés au sol", comment:"Balais et accessoires posés au sol constatés. Ranger immédiatement tout le matériel."}, {label:"Porte-balai cassé ET balais au sol", comment:"Porte-balai cassé ET balais au sol constatés. Réparer le porte-balai et ranger tout le matériel immédiatement."}] },
         ]
     },
-    process: {
-        name: "Respect des process PIZZ'ALIF", icon: "📋",
+    tacos: {
+        name: "Coin tacos", icon: "🌯",
         items: [
-            { id:"pr1", label:"Recettes pizza et tacos respectées", corrective:"Rappeler les fiches recettes PIZZ'ALIF à l'ensemble de l'équipe. Afficher les fiches à chaque poste et effectuer un contrôle de conformité des préparations.", reasons:[{label:"Dosages non respectés", comment:"Dosages des ingrédients non respectés constatés. Rappeler les fiches recettes PIZZ'ALIF à l'équipe."}, {label:"Fiches recettes non affichées", comment:"Fiches recettes non affichées aux postes constatées. Afficher immédiatement à chaque poste."}, {label:"Dosages non respectés ET fiches non affichées", comment:"Dosages non respectés ET fiches non affichées constatés. Afficher les fiches et former l'équipe au respect des recettes."}] },
-            { id:"pr2", label:"Utilisation des louches, verre doseur", corrective:"Imposer l'utilisation systématique des louches et verres doseurs pour chaque préparation. Vérifier la disponibilité du matériel de dosage à chaque poste.", reasons:[{label:"Dosage fait à l'œil", comment:"Dosage fait à l'œil sans ustensile constaté. Imposer l'utilisation des louches et verres doseurs."}, {label:"Matériel de dosage absent", comment:"Matériel de dosage absent du poste constaté. Remettre en place immédiatement."}, {label:"Matériel absent ET dosage à l'œil", comment:"Matériel absent ET dosage à l'œil constatés. Remettre le matériel et imposer son utilisation systématique."}] },
-            { id:"pr3", label:"Tout le matériel propre et fonctionnel", detail:"Laminoir, chauffe chocolat, salamandre, plaque induction", corrective:"Nettoyer et remettre en état le matériel défaillant. Commander les pièces de remplacement si nécessaire. Faire intervenir un technicien sous 48h pour les pannes.", reasons:[{label:"Matériel sale", comment:"Matériel sale constaté (non nettoyé après utilisation). Nettoyer immédiatement."}, {label:"Matériel non fonctionnel", comment:"Matériel non fonctionnel constaté (en panne). Faire intervenir un technicien sous 48h."}, {label:"Matériel sale ET non fonctionnel", comment:"Matériel sale ET non fonctionnel constaté. Nettoyer et faire réparer sous 48h."}] },
-            { id:"pr4", label:"Aucun manque de matériel", corrective:"Effectuer un inventaire complet du matériel. Commander immédiatement les éléments manquants auprès du fournisseur référencé PIZZ'ALIF.", reasons:[{label:"Matériel manquant", comment:"Matériel manquant constaté. Commander immédiatement auprès du fournisseur PIZZ'ALIF."}, {label:"Matériel cassé non remplacé", comment:"Matériel cassé non remplacé constaté. Commander le remplacement immédiatement."}, {label:"Matériel manquant ET inventaire non fait", comment:"Matériel manquant ET inventaire non effectué constatés. Effectuer un inventaire et commander les éléments manquants."}] },
-            { id:"pr5", label:"Étagères en inox (bois interdit), propres et en bon état", corrective:"Retirer immédiatement toute étagère en bois (non conforme aux normes d'hygiène). Commander et installer des étagères en inox conformes sous 15 jours.", reasons:[{label:"Étagères en bois présentes", comment:"Étagères en bois présentes constatées (non conforme). Retirer et commander des étagères inox sous 15 jours."}, {label:"Étagères sales", comment:"Étagères sales constatées. Nettoyer immédiatement."}, {label:"Étagères en bois ET sales", comment:"Étagères en bois ET sales constatées. Retirer les étagères en bois, nettoyer et commander des étagères inox."}] },
-            { id:"pr6", label:"Tenue PIZZ'ALIF conforme et hygiène du personnel", detail:"Tee-shirt PIZZ'ALIF, pantalon noir", corrective:"Fournir les tenues conformes à tous les équipiers (tee-shirt PIZZ'ALIF + pantalon noir). Rappeler les règles d'hygiène : cheveux attachés, ongles courts, pas de bijoux.", reasons:[{label:"Tenue non conforme", comment:"Tenue non conforme constatée (tee-shirt ou pantalon). Fournir la tenue conforme immédiatement."}, {label:"Hygiène non conforme", comment:"Hygiène du personnel non conforme constatée (cheveux, ongles, bijoux). Rappeler les règles immédiatement."}, {label:"Tenue ET hygiène non conformes", comment:"Tenue ET hygiène non conformes constatées. Fournir les tenues et rappeler toutes les règles d'hygiène."}] },
-            { id:"pr7", label:"Étiquetage DLC affiché sur les produits ouverts", corrective:"Étiqueter immédiatement tous les produits ouverts avec la date d'ouverture et la DLC secondaire. Jeter tout produit sans étiquetage ou dont la DLC est dépassée.", reasons:[{label:"Produits sans étiquette", comment:"Produits ouverts sans étiquette de DLC constatés. Étiqueter immédiatement avec date d'ouverture et DLC secondaire."}, {label:"DLC dépassée", comment:"DLC dépassée sur certains produits constatée. Jeter immédiatement les produits périmés."}, {label:"Sans étiquette ET DLC dépassée", comment:"Produits sans étiquette ET DLC dépassée constatés. Jeter les périmés et étiqueter tous les produits ouverts."}] },
-            { id:"pr8", label:"Au comptoir : pochettes présentes", detail:"Pochette contrat de travail, pochette hygiène, pochette sécurité", corrective:"Reconstituer immédiatement les pochettes manquantes (contrat de travail, hygiène, sécurité) et les placer au comptoir en accès libre pour le personnel.", reasons:[{label:"Pochette contrat absente", comment:"Pochette contrat de travail absente du comptoir constatée. Reconstituer et placer au comptoir immédiatement."}, {label:"Pochette hygiène ou sécurité absente", comment:"Pochette hygiène ou sécurité absente du comptoir constatée. Reconstituer et placer au comptoir immédiatement."}, {label:"Toutes les pochettes absentes", comment:"Toutes les pochettes absentes du comptoir constatées. Reconstituer l'ensemble et placer en accès libre."}] }
+            { id:"tc1", label:"Bain-marie tacos propre et à température", corrective:"Vider, nettoyer et détartrer le bain-marie. Vérifier le niveau d’eau et le réglage du thermostat : la température des sauces et garnitures doit être maintenue au-dessus de 63°C en permanence.", reasons:[{label:"Sale / encrassé", comment:"Bain-marie tacos sale ou entartré constaté. Vider, nettoyer et détartrer immédiatement."}, {label:"Hors température (< 63°C)", comment:"Bain-marie tacos hors température (< 63°C) constaté. Vérifier le thermostat et le niveau d’eau. Jeter les produits maintenus hors température."}, {label:"Sale ET hors température", comment:"Bain-marie tacos sale ET hors température constatés. Vider, nettoyer, détartrer et régler le thermostat. Jeter les produits non conformes."}] },
+            { id:"tc2", label:"Plaque à snacker propre et fonctionnelle", corrective:"Dégraisser et nettoyer la plaque à snacker après chaque service. Vérifier le bon fonctionnement du thermostat et la régularité de la chauffe. Faire intervenir un technicien sous 48h en cas de panne.", reasons:[{label:"Sale / encrassé", comment:"Plaque à snacker encrassée constatée (graisses cuites, résidus). Dégraisser immédiatement et rappeler le nettoyage après chaque service."}, {label:"En panne ou dysfonctionnement", comment:"Plaque à snacker en dysfonctionnement constatée (chauffe irrégulière, thermostat HS). Faire intervenir un technicien sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Plaque à snacker encrassée ET en dysfonctionnement constatées. Dégraisser immédiatement et faire intervenir un technicien sous 48h."}] },
+            { id:"tc3", label:"Hotte plaque à snacker propre, étiquette d’entretien affichée", detail:"Entretien < 1 an", corrective:"Nettoyer et dégraisser la hotte ainsi que ses filtres. Si l’entretien date de plus d’un an, planifier une intervention par une société agréée sous 30 jours et afficher l’attestation.", reasons:[{label:"Hotte ou filtres encrassés", comment:"Hotte de la plaque à snacker encrassée constatée (filtres gras). Nettoyer et dégraisser les filtres immédiatement."}, {label:"Étiquette d’entretien absente ou expirée", comment:"Étiquette d’entretien de la hotte absente ou datant de plus d’un an. Planifier une intervention par une société agréée sous 30 jours et afficher l’attestation."}, {label:"Hotte encrassée ET entretien expiré", comment:"Hotte encrassée ET entretien expiré constatés. Dégraisser les filtres et planifier l’intervention d’une société agréée sous 30 jours."}] },
+            { id:"tc4", label:"Chauffe chocolat propre et fonctionnel", detail:"Utilisé pour le cheddar", corrective:"Nettoyer entièrement la cuve du chauffe chocolat (bac, couvercle, pompe). Vérifier la température de maintien du cheddar et le bon fonctionnement de la résistance.", reasons:[{label:"Sale / encrassé", comment:"Chauffe chocolat sale constaté (cuve encrassée, coulures de cheddar). Nettoyer entièrement la cuve et le couvercle."}, {label:"En panne ou dysfonctionnement", comment:"Chauffe chocolat en dysfonctionnement constaté (ne chauffe pas ou température incorrecte). Faire réparer sous 48h et jeter le cheddar maintenu hors température."}, {label:"Sale ET dysfonctionnement", comment:"Chauffe chocolat sale ET en dysfonctionnement constatés. Nettoyer la cuve, faire réparer sous 48h et jeter le produit non conforme."}] },
+            { id:"tc5", label:"Machine panini propre et fonctionnelle", corrective:"Nettoyer les plaques du panini (dégraissage complet, rainures comprises). Vérifier la chauffe et l’état du revêtement. Remplacer la machine en cas d’usure du revêtement.", reasons:[{label:"Sale / encrassé", comment:"Machine panini encrassée constatée (résidus dans les rainures). Dégraisser complètement les plaques."}, {label:"En panne ou dysfonctionnement", comment:"Machine panini en dysfonctionnement constatée (chauffe insuffisante ou revêtement abîmé). Faire réparer ou remplacer sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Machine panini encrassée ET en dysfonctionnement constatées. Dégraisser les plaques et faire réparer ou remplacer sous 48h."}] },
+            { id:"tc6", label:"Machine à gratiner (salamandre) propre et fonctionnelle", corrective:"Nettoyer la salamandre en profondeur (résistances, grille, lèchefrite). Vérifier la montée en température et l’état des résistances. Faire intervenir un technicien sous 48h si nécessaire.", reasons:[{label:"Sale / encrassé", comment:"Salamandre encrassée constatée (grille et lèchefrite chargées de résidus brûlés). Nettoyer en profondeur immédiatement."}, {label:"En panne ou dysfonctionnement", comment:"Salamandre en dysfonctionnement constatée (résistance HS, gratinage insuffisant). Faire intervenir un technicien sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Salamandre encrassée ET en dysfonctionnement constatées. Nettoyer en profondeur et faire intervenir un technicien sous 48h."}] },
+            { id:"tc7", label:"Cuiseur à riz propre et fonctionnel", corrective:"Nettoyer le cuiseur à riz en profondeur (cuve, couvercle, joint). Vérifier la chauffe et le maintien au chaud. Remplacer la cuve si le revêtement est abîmé.", reasons:[{label:"Sale / encrassé", comment:"Cuiseur à riz sale constaté (cuve et joint encrassés). Nettoyer en profondeur immédiatement."}, {label:"En panne ou dysfonctionnement", comment:"Cuiseur à riz en dysfonctionnement constaté (chauffe ou maintien au chaud défaillant). Faire réparer ou remplacer sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Cuiseur à riz sale ET en dysfonctionnement constatés. Nettoyer la cuve et faire réparer ou remplacer sous 48h."}] },
+            { id:"tc8", label:"Friteuse propre et fonctionnelle", detail:"État des huiles vérifié", corrective:"Vidanger l’huile immédiatement si elle est usagée (couleur foncée, mousse, odeur). Nettoyer la cuve, le panier et les abords. Mettre en place un suivi écrit des vidanges.", reasons:[{label:"Huile usagée", comment:"Huile de friture usagée constatée (couleur foncée, mousse, odeur). Vidanger immédiatement et mettre en place un suivi écrit des vidanges."}, {label:"Friteuse encrassée", comment:"Friteuse encrassée constatée (cuve, panier, abords). Nettoyer intégralement immédiatement."}, {label:"Huile usagée ET friteuse encrassée", comment:"Huile usagée ET friteuse encrassée constatées. Vidanger l’huile, nettoyer la cuve et le panier, et instaurer un suivi des vidanges."}] },
+            { id:"tc9", label:"Chauffe frites propre et fonctionnel", corrective:"Nettoyer le chauffe frites (bac, grille, lampe chauffante). Vérifier que la lampe fonctionne et que les frites sont maintenues au chaud sans stockage prolongé.", reasons:[{label:"Sale / encrassé", comment:"Chauffe frites sale constaté (bac et grille encrassés). Nettoyer immédiatement."}, {label:"En panne ou dysfonctionnement", comment:"Chauffe frites en dysfonctionnement constaté (lampe HS, produit tiède). Remplacer la lampe ou faire réparer sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Chauffe frites sale ET en dysfonctionnement constatés. Nettoyer le bac et remplacer la lampe chauffante sous 48h."}] },
+            { id:"tc10", label:"Hotte friteuse propre, étiquette d’entretien affichée", detail:"Entretien < 1 an", corrective:"Nettoyer et dégraisser la hotte de la friteuse et ses filtres. Si l’entretien date de plus d’un an, planifier une intervention par une société agréée sous 30 jours et afficher l’attestation.", reasons:[{label:"Hotte ou filtres encrassés", comment:"Hotte de friteuse encrassée constatée (filtres gras, risque incendie). Dégraisser les filtres immédiatement."}, {label:"Étiquette d’entretien absente ou expirée", comment:"Étiquette d’entretien de la hotte friteuse absente ou expirée. Planifier une intervention par une société agréée sous 30 jours."}, {label:"Hotte encrassée ET entretien expiré", comment:"Hotte friteuse encrassée ET entretien expiré constatés. Dégraisser les filtres et faire intervenir une société agréée sous 30 jours."}] },
+            { id:"tc11", label:"Frigo coin tacos propre et à température", detail:"État des joints, moisissure, odeurs", corrective:"Nettoyer intégralement le frigo (intérieur, joints, grilles). Remplacer les joints abîmés. Vérifier que la température reste entre 0 et 4°C et relever le thermomètre.", reasons:[{label:"Frigo sale ou joints abîmés", comment:"Frigo du coin tacos sale ou joints abîmés constatés. Nettoyer intégralement et remplacer les joints."}, {label:"Température hors norme (> 4°C)", comment:"Température du frigo tacos hors norme (> 4°C) constatée. Ajuster le thermostat et faire intervenir un frigoriste sous 24h si instable."}, {label:"Frigo sale ET hors température", comment:"Frigo tacos sale ET hors température constatés. Nettoyer intégralement, ajuster le thermostat et contrôler les produits stockés."}] },
+            { id:"tc12", label:"Congélateur coin tacos propre et à température", corrective:"Nettoyer et dégivrer le congélateur si nécessaire. Vérifier que la température se maintient entre -22 et -18°C. Faire intervenir un frigoriste sous 24h si la température ne se stabilise pas.", reasons:[{label:"Congélateur sale ou givré", comment:"Congélateur du coin tacos sale ou excessivement givré constaté. Nettoyer et dégivrer immédiatement."}, {label:"Température hors norme (> -18°C)", comment:"Température du congélateur tacos hors norme (> -18°C) constatée. Ajuster le thermostat et faire intervenir un frigoriste sous 24h si instable."}, {label:"Congélateur sale ET hors température", comment:"Congélateur tacos sale ET hors température constatés. Dégivrer, nettoyer et faire vérifier le groupe froid sous 24h."}] },
+            { id:"tc13", label:"Saladette tacos propre, à température et bien approvisionnée", corrective:"Nettoyer et désinfecter la saladette et ses bacs. Vérifier la température (0-4°C), l’étiquetage DLC des bacs et le respect des niveaux de remplissage.", reasons:[{label:"Saladette sale", comment:"Saladette tacos sale constatée (bacs et joints encrassés). Nettoyer et désinfecter immédiatement."}, {label:"Température hors norme (> 4°C)", comment:"Température de la saladette tacos hors norme (> 4°C) constatée. Ajuster le thermostat et contrôler les produits."}, {label:"Bacs mal étiquetés ou mal approvisionnés", comment:"Bacs de la saladette tacos mal étiquetés ou mal approvisionnés constatés. Étiqueter avec la DLC et respecter les niveaux de remplissage."}] },
+            { id:"tc14", label:"Étagères coin tacos en inox, propres et rangées", detail:"Bois interdit", corrective:"Retirer immédiatement toute étagère en bois (non conforme aux normes d’hygiène). Nettoyer les étagères inox et ranger la marchandise selon la règle FIFO, rien au sol.", reasons:[{label:"Étagère en bois ou abîmée", comment:"Étagère en bois ou abîmée constatée au coin tacos. Retirer et remplacer par de l’inox immédiatement."}, {label:"Étagères sales", comment:"Étagères du coin tacos sales constatées. Nettoyer et désinfecter immédiatement."}, {label:"Étagères sales ET mal rangées", comment:"Étagères du coin tacos sales ET mal rangées constatées. Nettoyer, réorganiser selon la règle FIFO et ne rien laisser au sol."}] },
+            { id:"tc15", label:"Process tacos respecté", detail:"Recette, grammage, ordre de montage, dosage des sauces", corrective:"Rappeler la fiche technique tacos à l’ensemble de l’équipe : grammages, ordre de montage, utilisation systématique des louches et verres doseurs. Afficher la fiche au poste et contrôler la production sous 48h.", reasons:[{label:"Grammages non respectés", comment:"Grammages de la recette tacos non respectés constatés. Rappeler la fiche technique et imposer l’utilisation des louches et verres doseurs."}, {label:"Ordre de montage non respecté", comment:"Ordre de montage du tacos non respecté constaté. Afficher la fiche technique au poste et reformer l’équipe sous 48h."}, {label:"Fiche technique absente du poste", comment:"Fiche technique tacos absente du poste constatée. Imprimer et afficher immédiatement la fiche à jour."}] }
         ]
     },
-    cuisine: {
-        name: "Cuisine", icon: "🍳",
+    pizzas: {
+        name: "Coin pizzas", icon: "🍕",
         items: [
-            { id:"cu1", label:"Four propre et fonctionnel", corrective:"Nettoyer le four en profondeur (intérieur, vitre, grilles). Si dysfonctionnement, faire intervenir un technicien sous 48h. Aucun four sale ne doit être utilisé.", reasons:[{label:"Four sale", comment:"Four sale constaté (résidus, graisse, vitre opaque). Nettoyer en profondeur immédiatement."}, {label:"Four non fonctionnel", comment:"Four non fonctionnel constaté (en panne, thermostat défectueux). Faire intervenir un technicien sous 48h."}, {label:"Four sale ET non fonctionnel", comment:"Four sale ET non fonctionnel constaté. Nettoyer en profondeur et faire réparer sous 48h."}] },
-            { id:"cu2", label:"Plaque à snacker propre et fonctionnelle", corrective:"Dégraisser et nettoyer la plaque à snacker après chaque service. Vérifier le bon fonctionnement du thermostat. Faire réparer si nécessaire.", reasons:[{label:"Plaque sale", comment:"Plaque à snacker sale constatée (grasse, résidus). Nettoyer immédiatement."}, {label:"Plaque non fonctionnelle", comment:"Plaque à snacker non fonctionnelle constatée (thermostat défectueux). Faire réparer sous 48h."}, {label:"Plaque sale ET non fonctionnelle", comment:"Plaque à snacker sale ET non fonctionnelle constatée. Nettoyer et faire réparer sous 48h."}] },
-            { id:"cu3", label:"Panini propre et fonctionnel", corrective:"Nettoyer les plaques du panini (dégraissage complet). Vérifier la chauffe et le bon état du revêtement. Remplacer si usure avancée.", reasons:[{label:"Panini sale", comment:"Panini sale constaté (plaques grasses). Effectuer un dégraissage complet immédiatement."}, {label:"Panini non fonctionnel", comment:"Panini non fonctionnel constaté (chauffe insuffisante, revêtement usé). Faire réparer ou remplacer."}, {label:"Panini sale ET non fonctionnel", comment:"Panini sale ET non fonctionnel constaté. Nettoyer et faire réparer ou remplacer."}] },
-            { id:"cu4", label:"Friteuse propre et fonctionnelle", detail:"État des huiles vérifié", corrective:"Vidanger l'huile immédiatement si elle est usagée (couleur foncée, mousse, odeur). Nettoyer la cuve en profondeur. Remplir avec de l'huile neuve et noter la date de changement.", reasons:[{label:"Friteuse sale", comment:"Friteuse sale constatée (cuve grasse). Nettoyer la cuve en profondeur immédiatement."}, {label:"Huile usagée", comment:"Huile usagée constatée (couleur foncée, mousse, odeur). Vidanger et remplir avec de l'huile neuve."}, {label:"Friteuse sale ET huile usagée", comment:"Friteuse sale ET huile usagée constatées. Vidanger l'huile, nettoyer la cuve et remplir avec de l'huile neuve."}] },
-            { id:"cu5", label:"Bain-marie tacos et pizza propre et fonctionnel", corrective:"Vider, nettoyer et détartrer le bain-marie. Vérifier le niveau d'eau et le thermostat. S'assurer que la température de maintien est conforme (≥63°C).", reasons:[{label:"Bain-marie sale", comment:"Bain-marie sale constaté (entartré, résidus). Vider, nettoyer et détartrer immédiatement."}, {label:"Bain-marie non fonctionnel", comment:"Bain-marie non fonctionnel constaté (température < 63°C). Vérifier le thermostat et faire réparer."}, {label:"Bain-marie sale ET non fonctionnel", comment:"Bain-marie sale ET non fonctionnel constaté. Nettoyer, détartrer et faire réparer le thermostat."}] },
-            { id:"cu6", label:"Machine et frigo à dessert propres et en bon état", corrective:"Nettoyer la machine et le frigo à dessert (intérieur et extérieur). Vérifier la température du frigo et le bon fonctionnement de la machine. Faire réparer si nécessaire.", reasons:[{label:"Machine à dessert sale ou en panne", comment:"Machine à dessert sale ou en panne constatée. Nettoyer et/ou faire réparer sous 48h."}, {label:"Frigo à dessert sale ou non fonctionnel", comment:"Frigo à dessert sale ou non fonctionnel constaté. Nettoyer et vérifier la température."}, {label:"Machine ET frigo non conformes", comment:"Machine ET frigo à dessert non conformes constatés. Nettoyer les deux et faire réparer sous 48h."}] },
-            { id:"cu7", label:"Machine à glace en bon état et en marche", detail:"Tous les coulis/toppings disponibles, glace blanche testée", corrective:"Remettre la machine en marche et effectuer un cycle de nettoyage complet. Réapprovisionner tous les coulis et toppings manquants. Tester la glace blanche (goût, texture, température).", reasons:[{label:"Machine à l'arrêt", comment:"Machine à glace à l'arrêt constatée. Remettre en marche et effectuer un nettoyage complet."}, {label:"Coulis ou toppings manquants", comment:"Coulis ou toppings manquants constatés. Réapprovisionner immédiatement."}, {label:"Machine à l'arrêt ET toppings manquants", comment:"Machine à l'arrêt ET toppings manquants constatés. Remettre en marche, nettoyer et réapprovisionner."}] },
-            { id:"cu8", label:"Frigo fonctionnel et propre", detail:"État des joints, moisissure, odeurs", corrective:"Nettoyer intégralement le frigo (intérieur, joints, grilles). Remplacer les joints défectueux. Si moisissure détectée, désinfecter avec un produit alimentaire adapté.", reasons:[{label:"Frigo sale", comment:"Frigo sale constaté (intérieur, grilles). Nettoyer intégralement immédiatement."}, {label:"Frigo non fonctionnel", comment:"Frigo non fonctionnel constaté (température non conforme, joints moisis). Faire réparer sous 48h."}, {label:"Frigo sale ET non fonctionnel", comment:"Frigo sale ET non fonctionnel constaté. Nettoyer intégralement et faire réparer sous 48h."}] },
-            { id:"cu9", label:"Matériel cuisine en bon état, fonctionnel et propre", corrective:"Nettoyer et dégraisser l'ensemble du matériel de cuisine. Signaler les équipements en panne et planifier la réparation sous 48h.", reasons:[{label:"Matériel sale", comment:"Matériel cuisine sale constaté. Nettoyer et dégraisser immédiatement."}, {label:"Matériel non fonctionnel", comment:"Matériel cuisine non fonctionnel constaté. Signaler la panne et planifier la réparation sous 48h."}, {label:"Matériel sale ET non fonctionnel", comment:"Matériel cuisine sale ET non fonctionnel constaté. Nettoyer et faire réparer sous 48h."}] },
-            { id:"cu10", label:"Hotte propre, étiquette entretien affichée", detail:"Entretien < 1 an", corrective:"Nettoyer la hotte immédiatement. Si l'entretien date de plus d'un an, planifier une intervention d'un professionnel agréé sous 15 jours et afficher l'étiquette de conformité.", reasons:[{label:"Hotte sale", comment:"Hotte sale constatée (grasse, filtres encrassés). Nettoyer immédiatement."}, {label:"Entretien expiré (> 1 an)", comment:"Entretien professionnel expiré (> 1 an) constaté. Planifier une intervention sous 15 jours."}, {label:"Hotte sale ET entretien expiré", comment:"Hotte sale ET entretien expiré constatés. Nettoyer et planifier l'intervention d'un professionnel sous 15 jours."}] },
-            { id:"cu11", label:"Cuiseur à riz propre et fonctionnel", corrective:"Nettoyer le cuiseur à riz en profondeur (cuve, couvercle, joint). Vérifier le bon fonctionnement (chauffe, maintien au chaud). Faire réparer ou remplacer si défectueux.", reasons:[{label:"Cuiseur sale", comment:"Cuiseur à riz sale constaté (cuve avec résidus). Nettoyer en profondeur immédiatement."}, {label:"Cuiseur non fonctionnel", comment:"Cuiseur à riz non fonctionnel constaté. Faire réparer ou remplacer sous 48h."}, {label:"Cuiseur sale ET non fonctionnel", comment:"Cuiseur à riz sale ET non fonctionnel constaté. Nettoyer et faire réparer ou remplacer."}] }
+            { id:"pz1", label:"Four haut propre et fonctionnel", corrective:"Nettoyer le four haut en profondeur (sole, voûte, vitre, chaîne). Vérifier la montée en température et la régularité de cuisson. Faire intervenir un technicien sous 48h en cas de dysfonctionnement.", reasons:[{label:"Sale / encrassé", comment:"Four haut encrassé constaté (résidus de cuisson, sole sale). Nettoyer en profondeur immédiatement."}, {label:"En panne ou dysfonctionnement", comment:"Four haut en dysfonctionnement constaté (température irrégulière, cuisson non homogène). Faire intervenir un technicien sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Four haut encrassé ET en dysfonctionnement constatés. Nettoyer en profondeur et faire intervenir un technicien sous 48h."}] },
+            { id:"pz2", label:"Four bas propre et fonctionnel", corrective:"Nettoyer le four bas en profondeur (sole, voûte, vitre, chaîne). Vérifier la montée en température et la régularité de cuisson. Faire intervenir un technicien sous 48h en cas de dysfonctionnement.", reasons:[{label:"Sale / encrassé", comment:"Four bas encrassé constaté (résidus de cuisson, sole sale). Nettoyer en profondeur immédiatement."}, {label:"En panne ou dysfonctionnement", comment:"Four bas en dysfonctionnement constaté (température irrégulière, cuisson non homogène). Faire intervenir un technicien sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Four bas encrassé ET en dysfonctionnement constatés. Nettoyer en profondeur et faire intervenir un technicien sous 48h."}] },
+            { id:"pz3", label:"Hotte four propre, étiquette d’entretien affichée", detail:"Entretien < 1 an", corrective:"Nettoyer et dégraisser la hotte des fours et ses filtres. Si l’entretien date de plus d’un an, planifier une intervention par une société agréée sous 30 jours et afficher l’attestation.", reasons:[{label:"Hotte ou filtres encrassés", comment:"Hotte des fours encrassée constatée (filtres gras). Nettoyer et dégraisser les filtres immédiatement."}, {label:"Étiquette d’entretien absente ou expirée", comment:"Étiquette d’entretien de la hotte four absente ou datant de plus d’un an. Planifier une intervention par une société agréée sous 30 jours."}, {label:"Hotte encrassée ET entretien expiré", comment:"Hotte four encrassée ET entretien expiré constatés. Dégraisser les filtres et faire intervenir une société agréée sous 30 jours."}] },
+            { id:"pz4", label:"Frigo coin pizza propre et à température", detail:"État des joints, moisissure, odeurs", corrective:"Nettoyer intégralement le frigo (intérieur, joints, grilles). Remplacer les joints abîmés. Vérifier que la température reste entre 0 et 4°C et relever le thermomètre.", reasons:[{label:"Frigo sale ou joints abîmés", comment:"Frigo du coin pizza sale ou joints abîmés constatés. Nettoyer intégralement et remplacer les joints."}, {label:"Température hors norme (> 4°C)", comment:"Température du frigo pizza hors norme (> 4°C) constatée. Ajuster le thermostat et faire intervenir un frigoriste sous 24h si instable."}, {label:"Frigo sale ET hors température", comment:"Frigo pizza sale ET hors température constatés. Nettoyer intégralement, ajuster le thermostat et contrôler les produits stockés."}] },
+            { id:"pz5", label:"Saladette pizza propre, à température et bien approvisionnée", corrective:"Nettoyer et désinfecter la saladette et ses bacs. Vérifier la température (0-4°C), l’étiquetage DLC des bacs et le respect des niveaux de remplissage.", reasons:[{label:"Saladette sale", comment:"Saladette pizza sale constatée (bacs et joints encrassés). Nettoyer et désinfecter immédiatement."}, {label:"Température hors norme (> 4°C)", comment:"Température de la saladette pizza hors norme (> 4°C) constatée. Ajuster le thermostat et contrôler les produits."}, {label:"Bacs mal étiquetés ou mal approvisionnés", comment:"Bacs de la saladette pizza mal étiquetés ou mal approvisionnés constatés. Étiqueter avec la DLC et respecter les niveaux de remplissage."}] },
+            { id:"pz6", label:"Plan de travail propre, désinfecté et dégagé", corrective:"Nettoyer et désinfecter le plan de travail. Retirer tout matériel ou produit non nécessaire au poste. Mettre en place une désinfection systématique entre chaque service.", reasons:[{label:"Plan de travail sale", comment:"Plan de travail pizza sale constaté (résidus de farine, pâte séchée). Nettoyer et désinfecter immédiatement."}, {label:"Plan de travail encombré", comment:"Plan de travail pizza encombré constaté. Dégager le poste et ne conserver que le matériel nécessaire au service."}, {label:"Plan de travail sale ET encombré", comment:"Plan de travail pizza sale ET encombré constatés. Dégager le poste, nettoyer et désinfecter immédiatement."}] },
+            { id:"pz7", label:"Laminoir propre et fonctionnel", corrective:"Démonter, nettoyer et désinfecter le laminoir (rouleaux, tapis, carter). Vérifier le réglage de l’épaisseur et le bon fonctionnement du moteur. Faire intervenir un technicien sous 48h si nécessaire.", reasons:[{label:"Sale / encrassé", comment:"Laminoir sale constaté (résidus de pâte et de farine sur les rouleaux). Démonter, nettoyer et désinfecter immédiatement."}, {label:"En panne ou dysfonctionnement", comment:"Laminoir en dysfonctionnement constaté (réglage d’épaisseur ou moteur défaillant). Faire intervenir un technicien sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Laminoir sale ET en dysfonctionnement constatés. Nettoyer intégralement et faire intervenir un technicien sous 48h."}] },
+            { id:"pz8", label:"Étagères coin pizza en inox, propres et rangées", detail:"Bois interdit", corrective:"Retirer immédiatement toute étagère en bois (non conforme aux normes d’hygiène). Nettoyer les étagères inox et ranger la marchandise selon la règle FIFO, rien au sol.", reasons:[{label:"Étagère en bois ou abîmée", comment:"Étagère en bois ou abîmée constatée au coin pizza. Retirer et remplacer par de l’inox immédiatement."}, {label:"Étagères sales", comment:"Étagères du coin pizza sales constatées. Nettoyer et désinfecter immédiatement."}, {label:"Étagères sales ET mal rangées", comment:"Étagères du coin pizza sales ET mal rangées constatées. Nettoyer, réorganiser selon la règle FIFO et ne rien laisser au sol."}] },
+            { id:"pz9", label:"Process pizza respecté", detail:"Recette, grammage, garniture, temps de cuisson", corrective:"Rappeler la fiche technique pizza à l’ensemble de l’équipe : grammage de la pâte, dosage de la sauce, répartition de la garniture, temps de cuisson. Afficher la fiche au poste et contrôler la production sous 48h.", reasons:[{label:"Grammages ou garniture non conformes", comment:"Grammages ou répartition de la garniture non conformes constatés. Rappeler la fiche technique pizza et contrôler la production sous 48h."}, {label:"Temps de cuisson non respecté", comment:"Temps de cuisson pizza non respecté constaté. Rappeler les temps de référence et imposer l’utilisation des minuteries."}, {label:"Fiche technique absente du poste", comment:"Fiche technique pizza absente du poste constatée. Imprimer et afficher immédiatement la fiche à jour."}] }
+        ]
+    },
+    burgers: {
+        name: "Coin burgers", icon: "🍔",
+        items: [
+            { id:"bg1", label:"Plaque à steak propre et fonctionnelle", corrective:"Dégraisser et nettoyer la plaque à steak après chaque service. Vérifier le thermostat et la régularité de la chauffe. Faire intervenir un technicien sous 48h en cas de panne.", reasons:[{label:"Sale / encrassé", comment:"Plaque à steak encrassée constatée (graisses cuites, résidus). Dégraisser immédiatement et rappeler le nettoyage après chaque service."}, {label:"En panne ou dysfonctionnement", comment:"Plaque à steak en dysfonctionnement constatée (chauffe irrégulière, thermostat HS). Faire intervenir un technicien sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Plaque à steak encrassée ET en dysfonctionnement constatées. Dégraisser immédiatement et faire intervenir un technicien sous 48h."}] },
+            { id:"bg2", label:"Hotte plaque à steak propre, étiquette d’entretien affichée", detail:"Entretien < 1 an", corrective:"Nettoyer et dégraisser la hotte de la plaque à steak et ses filtres. Si l’entretien date de plus d’un an, planifier une intervention par une société agréée sous 30 jours et afficher l’attestation.", reasons:[{label:"Hotte ou filtres encrassés", comment:"Hotte de la plaque à steak encrassée constatée (filtres gras). Nettoyer et dégraisser les filtres immédiatement."}, {label:"Étiquette d’entretien absente ou expirée", comment:"Étiquette d’entretien de la hotte plaque à steak absente ou expirée. Planifier une intervention par une société agréée sous 30 jours."}, {label:"Hotte encrassée ET entretien expiré", comment:"Hotte plaque à steak encrassée ET entretien expiré constatés. Dégraisser les filtres et faire intervenir une société agréée sous 30 jours."}] },
+            { id:"bg3", label:"Frigo à steaks propre et à température", detail:"Traçabilité et DLC des steaks vérifiées", corrective:"Nettoyer intégralement le frigo à steaks. Vérifier la température (0-4°C), l’étiquetage DLC et la traçabilité des viandes. Jeter tout produit dont la DLC est dépassée.", reasons:[{label:"Frigo sale", comment:"Frigo à steaks sale constaté. Nettoyer intégralement et désinfecter immédiatement."}, {label:"Température hors norme (> 4°C)", comment:"Température du frigo à steaks hors norme (> 4°C) constatée. Ajuster le thermostat, contrôler les viandes et faire intervenir un frigoriste sous 24h si instable."}, {label:"DLC ou traçabilité non conformes", comment:"DLC ou traçabilité des steaks non conformes constatées. Jeter les produits périmés et rétablir l’étiquetage immédiatement."}] },
+            { id:"bg4", label:"Frigo coin burger propre et à température", detail:"État des joints, moisissure, odeurs", corrective:"Nettoyer intégralement le frigo (intérieur, joints, grilles). Remplacer les joints abîmés. Vérifier que la température reste entre 0 et 4°C et relever le thermomètre.", reasons:[{label:"Frigo sale ou joints abîmés", comment:"Frigo du coin burger sale ou joints abîmés constatés. Nettoyer intégralement et remplacer les joints."}, {label:"Température hors norme (> 4°C)", comment:"Température du frigo burger hors norme (> 4°C) constatée. Ajuster le thermostat et faire intervenir un frigoriste sous 24h si instable."}, {label:"Frigo sale ET hors température", comment:"Frigo burger sale ET hors température constatés. Nettoyer intégralement, ajuster le thermostat et contrôler les produits stockés."}] },
+            { id:"bg5", label:"Saladette burger propre, à température et bien approvisionnée", corrective:"Nettoyer et désinfecter la saladette et ses bacs. Vérifier la température (0-4°C), l’étiquetage DLC des bacs et le respect des niveaux de remplissage.", reasons:[{label:"Saladette sale", comment:"Saladette burger sale constatée (bacs et joints encrassés). Nettoyer et désinfecter immédiatement."}, {label:"Température hors norme (> 4°C)", comment:"Température de la saladette burger hors norme (> 4°C) constatée. Ajuster le thermostat et contrôler les produits."}, {label:"Bacs mal étiquetés ou mal approvisionnés", comment:"Bacs de la saladette burger mal étiquetés ou mal approvisionnés constatés. Étiqueter avec la DLC et respecter les niveaux de remplissage."}] },
+            { id:"bg6", label:"Étagères coin burger en inox, propres et rangées", detail:"Bois interdit", corrective:"Retirer immédiatement toute étagère en bois (non conforme aux normes d’hygiène). Nettoyer les étagères inox et ranger la marchandise selon la règle FIFO, rien au sol.", reasons:[{label:"Étagère en bois ou abîmée", comment:"Étagère en bois ou abîmée constatée au coin burger. Retirer et remplacer par de l’inox immédiatement."}, {label:"Étagères sales", comment:"Étagères du coin burger sales constatées. Nettoyer et désinfecter immédiatement."}, {label:"Étagères sales ET mal rangées", comment:"Étagères du coin burger sales ET mal rangées constatées. Nettoyer, réorganiser selon la règle FIFO et ne rien laisser au sol."}] },
+            { id:"bg7", label:"Chauffe beurre propre et fonctionnel", corrective:"Nettoyer entièrement le chauffe beurre (cuve, couvercle, bec verseur). Vérifier la température de maintien et le bon fonctionnement de la résistance. Renouveler le beurre selon la fréquence prévue.", reasons:[{label:"Sale / encrassé", comment:"Chauffe beurre sale constaté (cuve encrassée, dépôts). Nettoyer entièrement la cuve et le couvercle."}, {label:"En panne ou dysfonctionnement", comment:"Chauffe beurre en dysfonctionnement constaté (ne chauffe pas ou température incorrecte). Faire réparer sous 48h et jeter le produit maintenu hors température."}, {label:"Sale ET dysfonctionnement", comment:"Chauffe beurre sale ET en dysfonctionnement constatés. Nettoyer la cuve, faire réparer sous 48h et renouveler le produit."}] },
+            { id:"bg8", label:"Process burger respecté", detail:"Recette, grammage, cuisson des steaks, ordre de montage", corrective:"Rappeler la fiche technique burger à l’ensemble de l’équipe : grammages, cuisson à cœur des steaks, ordre de montage, dosage des sauces. Afficher la fiche au poste et contrôler la production sous 48h.", reasons:[{label:"Grammages ou montage non conformes", comment:"Grammages ou ordre de montage du burger non conformes constatés. Rappeler la fiche technique et contrôler la production sous 48h."}, {label:"Cuisson des steaks non conforme", comment:"Cuisson des steaks non conforme constatée. Rappeler les temps et la cuisson à cœur obligatoire. Contrôler la température à cœur."}, {label:"Fiche technique absente du poste", comment:"Fiche technique burger absente du poste constatée. Imprimer et afficher immédiatement la fiche à jour."}] }
+        ]
+    },
+    desserts: {
+        name: "Coin desserts", icon: "🥞",
+        items: [
+            { id:"ds1", label:"Machine à pancakes propre et fonctionnelle", corrective:"Nettoyer et dégraisser les plaques de la machine à pancakes. Vérifier la chauffe et l’état du revêtement. Remplacer en cas d’usure.", reasons:[{label:"Sale / encrassé", comment:"Machine à pancakes encrassée constatée (plaques et résidus de pâte). Dégraisser complètement immédiatement."}, {label:"En panne ou dysfonctionnement", comment:"Machine à pancakes en dysfonctionnement constatée (chauffe insuffisante, revêtement abîmé). Faire réparer ou remplacer sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Machine à pancakes encrassée ET en dysfonctionnement constatées. Nettoyer les plaques et faire réparer ou remplacer sous 48h."}] },
+            { id:"ds2", optional:true, label:"Machine à gaufres propre et fonctionnelle", corrective:"Nettoyer et dégraisser les plaques de la gaufrier (alvéoles comprises). Vérifier la chauffe et l’état du revêtement anti-adhésif. Remplacer en cas d’usure.", reasons:[{label:"Sale / encrassé", comment:"Machine à gaufres encrassée constatée (résidus de pâte dans les alvéoles). Dégraisser complètement immédiatement."}, {label:"En panne ou dysfonctionnement", comment:"Machine à gaufres en dysfonctionnement constatée (chauffe irrégulière, revêtement abîmé). Faire réparer ou remplacer sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Machine à gaufres encrassée ET en dysfonctionnement constatées. Nettoyer les plaques et faire réparer ou remplacer sous 48h."}] },
+            { id:"ds3", label:"Blender 1 propre et fonctionnel", corrective:"Démonter, nettoyer et désinfecter le blender (bol, joint, lames, socle). Vérifier l’état des lames et le bon fonctionnement du moteur. Remplacer le bol s’il est fissuré.", reasons:[{label:"Sale / encrassé", comment:"Blender 1 sale constaté (bol et joint encrassés). Démonter, nettoyer et désinfecter immédiatement."}, {label:"En panne ou dysfonctionnement", comment:"Blender 1 en dysfonctionnement constaté (lames usées, moteur ou bol défectueux). Faire réparer ou remplacer sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Blender 1 sale ET en dysfonctionnement constatés. Nettoyer intégralement et faire réparer ou remplacer sous 48h."}] },
+            { id:"ds4", optional:true, label:"Blender 2 propre et fonctionnel", corrective:"Démonter, nettoyer et désinfecter le blender (bol, joint, lames, socle). Vérifier l’état des lames et le bon fonctionnement du moteur. Remplacer le bol s’il est fissuré.", reasons:[{label:"Sale / encrassé", comment:"Blender 2 sale constaté (bol et joint encrassés). Démonter, nettoyer et désinfecter immédiatement."}, {label:"En panne ou dysfonctionnement", comment:"Blender 2 en dysfonctionnement constaté (lames usées, moteur ou bol défectueux). Faire réparer ou remplacer sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Blender 2 sale ET en dysfonctionnement constatés. Nettoyer intégralement et faire réparer ou remplacer sous 48h."}] },
+            { id:"ds5", label:"Machine à glace en bon état et en marche", detail:"Tous les coulis/toppings disponibles, glace blanche testée", corrective:"Remettre la machine en marche et effectuer un cycle de nettoyage complet. Vérifier le stock de mix et de toppings. Tester la texture de la glace avant le service.", reasons:[{label:"Machine à l’arrêt ou en panne", comment:"Machine à glace à l’arrêt ou en panne constatée. Remettre en marche et faire intervenir un technicien sous 48h si nécessaire."}, {label:"Machine sale ou nettoyage non effectué", comment:"Machine à glace sale ou cycle de nettoyage non effectué constaté. Lancer un cycle de nettoyage complet immédiatement."}, {label:"Coulis ou toppings manquants", comment:"Coulis ou toppings manquants constatés. Réapprovisionner immédiatement et vérifier le stock quotidiennement."}] },
+            { id:"ds6", label:"Machine à café propre et fonctionnelle", corrective:"Nettoyer et détartrer la machine à café (groupe, buse vapeur, bac de récupération). Vérifier le réglage de la mouture et la température d’extraction. Faire intervenir un technicien sous 48h si nécessaire.", reasons:[{label:"Sale / encrassé", comment:"Machine à café sale constatée (groupe, buse vapeur, bac de récupération encrassés). Nettoyer et détartrer immédiatement."}, {label:"En panne ou dysfonctionnement", comment:"Machine à café en dysfonctionnement constatée (extraction ou vapeur défaillante). Faire intervenir un technicien sous 48h."}, {label:"Sale ET dysfonctionnement", comment:"Machine à café sale ET en dysfonctionnement constatées. Nettoyer, détartrer et faire intervenir un technicien sous 48h."}] },
+            { id:"ds7", label:"Chauffe chocolat propre et fonctionnel", detail:"Utilisé pour le Nutella et la crème Bueno", corrective:"Nettoyer entièrement le chauffe chocolat (cuve, couvercle, bec verseur). Vérifier la température de maintien et le bon fonctionnement de la résistance. Renouveler le Nutella et la crème Bueno selon la fréquence prévue et étiqueter la date d’ouverture.", reasons:[{label:"Cuve sale ou coulures", comment:"Chauffe chocolat du coin dessert sale constaté (cuve encrassée, coulures de Nutella ou de crème Bueno). Nettoyer entièrement la cuve, le couvercle et le bec verseur."}, {label:"En panne ou hors température", comment:"Chauffe chocolat en dysfonctionnement constaté (ne chauffe pas ou température de maintien incorrecte). Faire réparer sous 48h et jeter le produit maintenu hors température."}, {label:"Produit non étiqueté ou DLC dépassée", comment:"Nutella ou crème Bueno sans étiquetage de date d’ouverture ou DLC secondaire dépassée constatés. Jeter le produit non conforme et rétablir l’étiquetage immédiatement."}] },
+            { id:"ds8", label:"Frigo tiramisu propre et à température", detail:"DLC des desserts vérifiées", corrective:"Nettoyer intégralement le frigo tiramisu. Vérifier la température (0-4°C) et l’étiquetage DLC de chaque dessert. Jeter tout produit dont la DLC est dépassée.", reasons:[{label:"Frigo sale", comment:"Frigo tiramisu sale constaté. Nettoyer intégralement et désinfecter immédiatement."}, {label:"Température hors norme (> 4°C)", comment:"Température du frigo tiramisu hors norme (> 4°C) constatée. Ajuster le thermostat et contrôler les desserts stockés."}, {label:"DLC dépassées ou étiquetage absent", comment:"DLC dépassées ou étiquetage absent constatés sur les desserts. Jeter les produits périmés et rétablir l’étiquetage immédiatement."}] },
+            { id:"ds9", label:"Frigo toppings propre et à température", corrective:"Nettoyer intégralement le frigo à toppings et ses bacs. Vérifier la température (0-4°C), l’étiquetage DLC des produits ouverts et le réapprovisionnement.", reasons:[{label:"Frigo sale", comment:"Frigo à toppings sale constaté. Nettoyer intégralement et désinfecter immédiatement."}, {label:"Température hors norme (> 4°C)", comment:"Température du frigo à toppings hors norme (> 4°C) constatée. Ajuster le thermostat et contrôler les produits."}, {label:"Toppings manquants ou non étiquetés", comment:"Toppings manquants ou produits ouverts non étiquetés constatés. Réapprovisionner et étiqueter avec la DLC secondaire."}] },
+            { id:"ds10", label:"Congélateur smoothie propre et à température", corrective:"Nettoyer et dégivrer le congélateur si nécessaire. Vérifier que la température se maintient entre -22 et -18°C. Contrôler le stock de fruits surgelés et leur étiquetage.", reasons:[{label:"Congélateur sale ou givré", comment:"Congélateur smoothie sale ou excessivement givré constaté. Nettoyer et dégivrer immédiatement."}, {label:"Température hors norme (> -18°C)", comment:"Température du congélateur smoothie hors norme (> -18°C) constatée. Ajuster le thermostat et faire intervenir un frigoriste sous 24h si instable."}, {label:"Produits non étiquetés ou décongelés", comment:"Produits non étiquetés ou partiellement décongelés constatés. Jeter les produits décongelés et rétablir l’étiquetage."}] },
+            { id:"ds11", optional:true, label:"Évier coin dessert propre et fonctionnel", corrective:"Nettoyer et désinfecter l’évier, le plan égouttoir et la robinetterie. Vérifier l’écoulement et l’absence de fuite. Faire intervenir un plombier sous 48h en cas de problème.", reasons:[{label:"Évier sale", comment:"Évier du coin dessert sale constaté (dépôts, vaisselle stagnante). Nettoyer et désinfecter immédiatement."}, {label:"Écoulement bouché ou fuite", comment:"Écoulement bouché ou fuite constatés à l’évier du coin dessert. Déboucher ou faire intervenir un plombier sous 48h."}, {label:"Évier sale ET problème d’écoulement", comment:"Évier sale ET problème d’écoulement constatés. Nettoyer, désinfecter et faire intervenir un plombier sous 48h."}] },
+            { id:"ds12", label:"Process dessert respecté", detail:"Recette, grammage, dressage, dosage des toppings", corrective:"Rappeler les fiches techniques desserts à l’ensemble de l’équipe : grammages, dressage, dosage des coulis et toppings. Afficher les fiches au poste et contrôler la production sous 48h.", reasons:[{label:"Grammages ou dosages non respectés", comment:"Grammages ou dosage des toppings non respectés constatés. Rappeler les fiches techniques et imposer l’utilisation des doseurs."}, {label:"Dressage non conforme", comment:"Dressage des desserts non conforme constaté. Afficher les fiches de dressage au poste et reformer l’équipe sous 48h."}, {label:"Fiche technique absente du poste", comment:"Fiche technique dessert absente du poste constatée. Imprimer et afficher immédiatement la fiche à jour."}] }
         ]
     },
     depot: {
@@ -765,6 +842,132 @@ var TEMPS = [
     { id:"t16", label:"Bain-marie pizza", type:"hot", group:"chaud" }
 ];
 
+/* ===== Coins optionnels : certains etablissements n'ont pas tous les postes ===== */
+var OPTIONAL_CATS = ['burgers'];
+var DISABLED_CATS = {};
+
+function isCatActive(k) { return !DISABLED_CATS[k]; }
+function activeCatKeys() { return Object.keys(DATA).filter(isCatActive); }
+function inactiveCatNames() { return Object.keys(DATA).filter(function(k) { return !isCatActive(k); }).map(function(k) { return DATA[k].icon + ' ' + DATA[k].name; }); }
+
+function getCoinPrefs() { try { var s = localStorage.getItem('pizzalif_coins'); if (s) return JSON.parse(s); } catch(e) {} return {}; }
+function saveCoinPrefs(p) { try { localStorage.setItem('pizzalif_coins', JSON.stringify(p)); } catch(e) {} }
+function currentStoreKey() { var s = document.getElementById('store-name'); return (s && s.selectedIndex > 0) ? s.value : ''; }
+
+function applyCatState(k) {
+    var el = document.querySelector('[data-cat="' + k + '"]');
+    if (!el) return;
+    var off = !isCatActive(k);
+    if (off) { el.classList.add('cat-off'); el.classList.remove('open'); } else { el.classList.remove('cat-off'); }
+    var cb = document.getElementById('cat-toggle-' + k);
+    if (cb) cb.checked = !off;
+    var lb = el.querySelector('.switch-label');
+    if (lb) lb.textContent = off ? 'Absent' : 'Présent';
+}
+
+function setCatActive(k, on, persist) {
+    if (!DATA[k]) return;
+    DISABLED_CATS[k] = !on;
+    if (!on) {
+        DATA[k].items.forEach(function(item) {
+            document.querySelectorAll('input[name="' + item.id + '"]').forEach(function(r) { r.checked = false; });
+            var cd = document.getElementById('cmt-' + item.id);
+            if (cd) {
+                cd.classList.remove('open', 'required');
+                var ta = cd.querySelector('textarea'); if (ta) ta.value = '';
+                var nr = cd.querySelector('.nc-reasons');
+                if (nr) { nr.style.display = 'none'; nr.querySelectorAll('.nc-btn').forEach(function(b) { b.classList.remove('active'); }); }
+            }
+            delete photoStore[item.id];
+            var pw = document.getElementById('photo-preview-' + item.id); if (pw) pw.innerHTML = '';
+        });
+    }
+    applyCatState(k);
+    if (persist !== false) {
+        var store = currentStoreKey();
+        if (store) { var p = getCoinPrefs(); if (!p[store]) p[store] = {}; p[store][k] = !!on; saveCoinPrefs(p); }
+    }
+    if (typeof updateScores === 'function') updateScores();
+}
+
+function toggleCat(k, on) { setCatActive(k, on, true); }
+
+function applyStoreCoins() {
+    var prefs = getCoinPrefs()[currentStoreKey()] || {};
+    OPTIONAL_CATS.forEach(function(k) {
+        var on = (prefs[k] === undefined) ? true : !!prefs[k];
+        setCatActive(k, on, false);
+    });
+}
+
+/* ===== Points optionnels : equipements que tous les magasins n'ont pas ===== */
+var DISABLED_ITEMS = {};
+
+function isItemActive(id) { return !DISABLED_ITEMS[id]; }
+function activeItems(catKey) { return DATA[catKey].items.filter(function(i) { return isItemActive(i.id); }); }
+function optionalItemIds() {
+    var out = [];
+    Object.keys(DATA).forEach(function(k) { DATA[k].items.forEach(function(i) { if (i.optional) out.push(i.id); }); });
+    return out;
+}
+function inactiveItemLabels() {
+    var out = [];
+    Object.keys(DATA).forEach(function(k) {
+        if (!isCatActive(k)) return;
+        DATA[k].items.forEach(function(i) { if (i.optional && !isItemActive(i.id)) out.push(i.label); });
+    });
+    return out;
+}
+
+function getItemPrefs() { try { var s = localStorage.getItem('pizzalif_items'); if (s) return JSON.parse(s); } catch(e) {} return {}; }
+function saveItemPrefs(p) { try { localStorage.setItem('pizzalif_items', JSON.stringify(p)); } catch(e) {} }
+
+function applyItemState(id) {
+    var row = document.getElementById('row-' + id);
+    var off = !isItemActive(id);
+    if (row) {
+        if (off) row.classList.add('item-off'); else row.classList.remove('item-off');
+        var lb = row.querySelector('.item-toggle .switch-label');
+        if (lb) lb.textContent = off ? 'Absent' : 'Présent';
+    }
+    var cb = document.getElementById('item-toggle-' + id);
+    if (cb) cb.checked = !off;
+    var cd = document.getElementById('cmt-' + id);
+    if (cd) { if (off) cd.classList.add('item-off-field'); else cd.classList.remove('item-off-field'); }
+}
+
+function setItemActive(id, on, persist) {
+    DISABLED_ITEMS[id] = !on;
+    if (!on) {
+        document.querySelectorAll('input[name="' + id + '"]').forEach(function(r) { r.checked = false; });
+        var cd = document.getElementById('cmt-' + id);
+        if (cd) {
+            cd.classList.remove('open', 'required');
+            var ta = cd.querySelector('textarea'); if (ta) ta.value = '';
+            var nr = cd.querySelector('.nc-reasons');
+            if (nr) { nr.style.display = 'none'; nr.querySelectorAll('.nc-btn').forEach(function(b) { b.classList.remove('active'); }); }
+        }
+        delete photoStore[id];
+        var pw = document.getElementById('photo-preview-' + id); if (pw) pw.innerHTML = '';
+    }
+    applyItemState(id);
+    if (persist !== false) {
+        var store = currentStoreKey();
+        if (store) { var p = getItemPrefs(); if (!p[store]) p[store] = {}; p[store][id] = !!on; saveItemPrefs(p); }
+    }
+    if (typeof updateScores === 'function') updateScores();
+}
+
+function toggleItem(id, on) { setItemActive(id, on, true); }
+
+function applyStoreItems() {
+    var prefs = getItemPrefs()[currentStoreKey()] || {};
+    optionalItemIds().forEach(function(id) {
+        var on = (prefs[id] === undefined) ? true : !!prefs[id];
+        setItemActive(id, on, false);
+    });
+}
+
 var photoStore = {};
 var tempPhotoStore = {};
 var customCounter = 0;
@@ -779,6 +982,7 @@ function buildCheckItems() {
             list.innerHTML +=
                 '<div class="check-item" id="row-' + item.id + '">' +
                     '<div class="item-label">' + item.label + (item.detail ? '<span class="sub-detail">' + item.detail + '</span>' : '') + '</div>' +
+                    (item.optional ? '<label class="item-toggle" title="D\u00e9sactivez si l\u2019\u00e9tablissement n\u2019en dispose pas">' + '<input type="checkbox" id="item-toggle-' + item.id + '" checked onchange="toggleItem(\'' + item.id + '\', this.checked)">' + '<span class="switch"></span><span class="switch-label">Pr\u00e9sent</span></label>' : '') +
                     '<div class="radio-group">' +
                         '<label class="radio-btn conforme"><input type="radio" name="' + item.id + '" value="C" onchange="updateScores(); handleRadioChange(\'' + item.id + '\')"> ✅</label>' +
                         '<label class="radio-btn non-conforme"><input type="radio" name="' + item.id + '" value="NC" onchange="updateScores(); handleRadioChange(\'' + item.id + '\')"> <span style="color:#e60000">✖</span></label>' +
@@ -1183,6 +1387,8 @@ function onStoreSelect() {
     var s = document.getElementById('store-name'); var o = s.options[s.selectedIndex];
     document.getElementById('store-address').value = o.getAttribute('data-addr') || '';
     document.getElementById('store-siren').value = o.getAttribute('data-siren') || '';
+    applyStoreCoins();
+    applyStoreItems();
 }
 
 function handlePhotos(itemId, input) {
@@ -1241,15 +1447,21 @@ function updateScores() {
     var totalAll = 0, conformeAll = 0;
     Object.keys(DATA).forEach(function(catKey) {
         var cat = DATA[catKey]; var total = 0, conforme = 0;
-        cat.items.forEach(function(item) {
+        if (!isCatActive(catKey)) {
+            var offEl = document.querySelector('[data-cat="' + catKey + '"] [data-score]');
+            if (offEl) { offEl.textContent = 'Non applicable'; offEl.className = 'cat-score neutral'; }
+            return;
+        }
+        var actItems = activeItems(catKey);
+        actItems.forEach(function(item) {
             var checked = document.querySelector('input[name="' + item.id + '"]:checked');
             if (checked) { total++; if (checked.value === 'C') conforme++; }
         });
         totalAll += total; conformeAll += conforme;
         var scoreEl = document.querySelector('[data-cat="' + catKey + '"] [data-score]');
         if (scoreEl) {
-            scoreEl.textContent = (total > 0 ? conforme : '—') + ' / ' + cat.items.length;
-            scoreEl.className = 'cat-score ' + (total === 0 ? 'neutral' : (conforme / cat.items.length >= 0.8 ? 'good' : conforme / cat.items.length >= 0.5 ? 'warn' : 'bad'));
+            scoreEl.textContent = (total > 0 ? conforme : '—') + ' / ' + actItems.length;
+            scoreEl.className = 'cat-score ' + (total === 0 || actItems.length === 0 ? 'neutral' : (conforme / actItems.length >= 0.8 ? 'good' : conforme / actItems.length >= 0.5 ? 'warn' : 'bad'));
         }
     });
     document.getElementById('header-pct').textContent = totalAll > 0 ? Math.round(conformeAll / totalAll * 100) + '%' : '—';
@@ -1312,9 +1524,9 @@ function generateReport() {
         document.getElementById(!storeNameVal ? 'store-name' : 'inspector').focus(); return;
     }
     var missingItems = [];
-    Object.keys(DATA).forEach(function(catKey) {
+    activeCatKeys().forEach(function(catKey) {
         var cat = DATA[catKey];
-        cat.items.forEach(function(item) {
+        activeItems(catKey).forEach(function(item) {
             var checked = document.querySelector('input[name="' + item.id + '"]:checked');
             if (!checked) missingItems.push({ cat: cat.name, label: item.label });
         });
@@ -1334,7 +1546,7 @@ function generateReport() {
     }
 
     var missingComments = [];
-    Object.keys(DATA).forEach(function(catKey) { DATA[catKey].items.forEach(function(item) {
+    activeCatKeys().forEach(function(catKey) { activeItems(catKey).forEach(function(item) {
         var nc = document.querySelector('input[name="' + item.id + '"][value="NC"]');
         if (nc && nc.checked) { var cd = document.getElementById('cmt-' + item.id); var ta = cd ? cd.querySelector('textarea') : null;
             if (!ta || !ta.value.trim()) missingComments.push(item.label); }
@@ -1371,9 +1583,9 @@ function generateReport() {
 
     var totalC = 0, totalNC = 0, totalItems = 0, nonConformes = [];
     var catHtml = '';
-    Object.keys(DATA).forEach(function(catKey) {
-        var cat = DATA[catKey]; var catC = 0, catNC = 0, catTotal = cat.items.length; var itemsHtml = '';
-        cat.items.forEach(function(item) {
+    activeCatKeys().forEach(function(catKey) {
+        var cat = DATA[catKey]; var catC = 0, catNC = 0, catTotal = activeItems(catKey).length; var itemsHtml = '';
+        activeItems(catKey).forEach(function(item) {
             var checked = document.querySelector('input[name="' + item.id + '"]:checked');
             var val = checked ? checked.value : null;
             var cmtDiv = document.getElementById('cmt-' + item.id);
@@ -1390,6 +1602,16 @@ function generateReport() {
         var clr = catCls === 'good' ? 'green' : catCls === 'warn' ? 'orange' : 'red';
         catHtml += '<div class="rpt-cat"><h4>' + cat.icon + ' ' + cat.name + '</h4><span class="rpt-cat-score" style="background:var(--' + clr + '-light);color:var(--' + clr + ')">' + catPct + '% — ' + catC + '/' + catTotal + '</span>' + itemsHtml + '</div>';
     });
+
+    var naItems = inactiveItemLabels();
+    if (naItems.length > 0) {
+        catHtml += '<div class="rpt-cat"><h4>➖ Équipements non présents</h4><div class="rpt-item"><span>Non applicable dans cet établissement : ' + naItems.join(', ') + '. Ces points sont exclus du calcul du score.</span></div></div>';
+    }
+
+    var naList = inactiveCatNames();
+    if (naList.length > 0) {
+        catHtml += '<div class="rpt-cat"><h4>➖ Postes non applicables</h4><div class="rpt-item"><span>Cet établissement ne dispose pas de : ' + naList.join(', ') + '. Ces points sont exclus du calcul du score.</span></div></div>';
+    }
 
     var tempHtml = '<div class="rpt-cat"><h4>🌡️ Relevé de Températures</h4>';
     var tempNCs = [];
@@ -1473,16 +1695,26 @@ function generateMailVersion(storeName, storeAddr, storeSiren, inspector, dateSt
     s += 'Conformes : <strong style="color:#059669">' + totalC + '/' + totalItems + '</strong> | Non conformes : <strong style="color:#e60000">' + totalNC + '</strong>';
     s += '</div>';
 
+    var naMailItems = inactiveItemLabels();
+    if (naMailItems.length > 0) {
+        s += '<p style="font-size:13px;color:#555;font-style:italic">Équipements non présents dans cet établissement : ' + naMailItems.join(', ') + '. Ces points sont exclus du contrôle et du calcul du score.</p>';
+    }
+
+    var naMail = inactiveCatNames();
+    if (naMail.length > 0) {
+        s += '<p style="font-size:13px;color:#555;font-style:italic">Postes non applicables pour cet établissement : ' + naMail.join(', ') + '. Les points correspondants sont exclus du contrôle et du calcul du score.</p>';
+    }
+
     // === DÉTAIL PAR CATÉGORIE ===
     var catNum = 0;
-    Object.keys(DATA).forEach(function(catKey) {
+    activeCatKeys().forEach(function(catKey) {
         var cat = DATA[catKey];
         catNum++;
         var catC = 0, catNC = 0;
         var ncItems = [];
         var cItems = [];
 
-        cat.items.forEach(function(item) {
+        activeItems(catKey).forEach(function(item) {
             var checked = document.querySelector('input[name="' + item.id + '"]:checked');
             var val = checked ? checked.value : null;
             var cmtDiv = document.getElementById('cmt-' + item.id);
@@ -1491,7 +1723,8 @@ function generateMailVersion(storeName, storeAddr, storeSiren, inspector, dateSt
             else if (val === 'NC') { catNC++; ncItems.push({ label: item.label, comment: comment, corrective: item.corrective || '' }); }
         });
 
-        var catPct = cat.items.length > 0 ? Math.round(catC / cat.items.length * 100) : 0;
+        var catActive = activeItems(catKey).length;
+        var catPct = catActive > 0 ? Math.round(catC / catActive * 100) : 0;
         var catColor = catPct === 100 ? '#059669' : catPct >= 80 ? '#059669' : catPct >= 50 ? '#d97706' : '#e60000';
 
         s += '<div style="margin-top:20px">';
@@ -1598,13 +1831,14 @@ function generateMailVersion(storeName, storeAddr, storeSiren, inspector, dateSt
     s += '<tr style="border-bottom:2px solid #cbd5e1"><td style="padding:6px 8px;font-weight:700">Catégorie</td><td style="padding:6px 8px;text-align:center;font-weight:700;color:#059669">Conformes</td><td style="padding:6px 8px;text-align:center;font-weight:700;color:#e60000">Non conformes</td><td style="padding:6px 8px;text-align:center;font-weight:700">Score</td></tr>';
 
     var catSummaries = [];
-    Object.keys(DATA).forEach(function(catKey) {
+    activeCatKeys().forEach(function(catKey) {
         var cat = DATA[catKey]; var cC = 0, cNC = 0;
-        cat.items.forEach(function(item) {
+        var actCat = activeItems(catKey);
+        actCat.forEach(function(item) {
             var ch = document.querySelector('input[name="' + item.id + '"]:checked');
             if (ch && ch.value === 'C') cC++; else if (ch && ch.value === 'NC') cNC++;
         });
-        var pct = cat.items.length > 0 ? Math.round(cC / cat.items.length * 100) : 0;
+        var pct = actCat.length > 0 ? Math.round(cC / actCat.length * 100) : 0;
         var pctColor = pct >= 80 ? '#059669' : pct >= 50 ? '#d97706' : '#e60000';
         catSummaries.push({ name: cat.name, pct: pct, nc: cNC });
         s += '<tr style="border-bottom:1px solid #e2e8f0"><td style="padding:5px 8px">' + cat.icon + ' ' + cat.name + '</td><td style="padding:5px 8px;text-align:center;color:#059669">' + cC + '/' + cat.items.length + '</td><td style="padding:5px 8px;text-align:center;color:#e60000">' + cNC + '</td><td style="padding:5px 8px;text-align:center;font-weight:700;color:' + pctColor + '">' + pct + '%</td></tr>';
@@ -1785,6 +2019,8 @@ function resetForm() {
         var rsel = document.getElementById('temp-reason-sel-' + t.id); if (rsel) { rsel.selectedIndex = 0; }
         var rcw = document.getElementById('temp-reason-custom-' + t.id); if (rcw) { rcw.style.display = 'none'; var inp = rcw.querySelector('input'); if (inp) inp.value = ''; }
     });
+    OPTIONAL_CATS.forEach(function(k) { setCatActive(k, true, false); });
+    optionalItemIds().forEach(function(id) { setItemActive(id, true, false); });
     document.querySelectorAll('.category.open').forEach(function(c) { c.classList.remove('open'); });
     document.getElementById('report-wrap').classList.remove('visible');
     updateScores(); window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1817,7 +2053,9 @@ function saveInspectors(l) { try { localStorage.setItem('pizzalif_inspectors', J
 function getCustomData() { try { var s = localStorage.getItem('pizzalif_data'); if (s) return JSON.parse(s); } catch(e) {} return null; }
 function saveCustomData() { try { localStorage.setItem('pizzalif_data', JSON.stringify(DATA)); } catch(e) {} }
 
-function loadSavedData() { var saved = getCustomData(); if (saved) Object.keys(saved).forEach(function(k) { if (DATA[k]) DATA[k].items = saved[k].items; else DATA[k] = saved[k]; }); }
+function loadSavedData() {
+    try { if (localStorage.getItem('pizzalif_schema') !== 'v2') { localStorage.removeItem('pizzalif_data'); localStorage.setItem('pizzalif_schema', 'v2'); } } catch(e) {}
+    var saved = getCustomData(); if (saved) Object.keys(saved).forEach(function(k) { if (DATA[k]) DATA[k].items = saved[k].items; else DATA[k] = saved[k]; }); }
 
 function rebuildStoreDropdown() {
     var stores = getStores(); stores.sort(function(a, b) { return a.display.localeCompare(b.display, 'fr'); });
@@ -1917,8 +2155,8 @@ document.addEventListener('click', function(e) {
 
 function rebuildAllCheckItems() {
     Object.keys(DATA).forEach(function(k) { var l = document.getElementById('list-' + k); if (l) l.innerHTML = '';
-        var s = document.querySelector('[data-cat="' + k + '"] [data-score]'); if (s) s.textContent = '— / ' + DATA[k].items.length;
-    }); photoStore = {}; buildCheckItems(); updateScores();
+        var s = document.querySelector('[data-cat="' + k + '"] [data-score]'); if (s) s.textContent = '— / ' + activeItems(k).length;
+    }); photoStore = {}; buildCheckItems(); optionalItemIds().forEach(function(id) { applyItemState(id); }); updateScores();
 }
 
 function openSettings() { document.getElementById('settings-modal').classList.add('open'); document.body.style.overflow = 'hidden'; renderSettingsStores(); renderSettingsInspectors(); renderSettingsControls(); populateCpCategorySelect(); }
@@ -1969,7 +2207,9 @@ function initApp() {
     loadSavedData(); rebuildStoreDropdown(); rebuildInspectorDropdown();
     document.getElementById('ctrl-date').valueAsDate = new Date();
     var now = new Date(); document.getElementById('ctrl-time').value = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-    buildCheckItems(); buildTempFields(); updateScores();
+    buildCheckItems(); buildTempFields();
+    optionalItemIds().forEach(function(id) { applyItemState(id); });
+    updateScores();
 }
 
 initApp();
