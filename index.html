@@ -92,6 +92,14 @@
         .category.cat-off { opacity: .5; }
         .category.cat-off .category-body { display: none !important; }
         .category.cat-off .chevron { visibility: hidden; }
+        .rpt-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 20px 18px; }
+        .rpt-kpi { border: 1px solid var(--gray-200); border-radius: 10px; padding: 12px 8px 10px; text-align: center; background: #fafafa; }
+        .rpt-kpi .k-val { font-size: 24px; font-weight: 900; line-height: 1; }
+        .rpt-kpi .k-sub { font-size: 10px; color: #9a9a9a; margin-top: 3px; font-weight: 600; }
+        .rpt-kpi .k-name { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .3px; color: #666; margin-top: 6px; line-height: 1.3; }
+        .rpt-kpi .k-bar { height: 4px; border-radius: 3px; background: var(--gray-200); margin-top: 8px; overflow: hidden; }
+        .rpt-kpi .k-bar span { display: block; height: 100%; border-radius: 3px; }
+        @media (max-width: 700px) { .rpt-kpis { grid-template-columns: repeat(2, 1fr); padding: 0 14px 14px; } }
         .item-toggle { display: flex; align-items: center; gap: 5px; cursor: pointer; flex: 0 0 auto; margin-right: 6px; }
         .item-toggle input { display: none; }
         .item-toggle .switch { width: 30px; height: 16px; border-radius: 20px; background: #c4c4c4; position: relative; transition: background .2s; }
@@ -99,6 +107,10 @@
         .item-toggle input:checked + .switch { background: var(--green); }
         .item-toggle input:checked + .switch::after { transform: translateX(14px); }
         .item-toggle .switch-label { font-size: 9px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; color: #777; min-width: 52px; }
+        .sector-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 14px 0 6px; padding: 6px 10px; border-left: 3px solid var(--red); background: var(--gray-100); border-radius: 0 6px 6px 0; }
+        .sector-head:first-child { margin-top: 2px; }
+        .sector-head .sector-name { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .4px; color: #444; }
+        .sector-head.sector-off { opacity: .5; }
         .check-item.item-off { opacity: .45; }
         .check-item.item-off .radio-group, .check-item.item-off .comment-btn { pointer-events: none; opacity: .35; }
         .comment-field.item-off-field { display: none !important; }
@@ -148,12 +160,14 @@
         .add-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(5,150,105,0.4), 0 2px 4px rgba(0,0,0,0.1); }
         .add-btn:active { transform: translateY(1px); box-shadow: 0 1px 2px rgba(5,150,105,0.2), inset 0 2px 4px rgba(0,0,0,0.1); }
         .delete-btn { background: none; border: 1px solid var(--red); color: var(--red); border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 14px; }
-        .temp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .temp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        @media (max-width: 1100px) { .temp-grid { grid-template-columns: repeat(2, 1fr); } }
         .temp-column { display: flex; flex-direction: column; gap: 8px; }
         .temp-column-header { font-weight: 700; font-size: 14px; padding: 8px 12px; border-radius: 8px; text-align: center; margin-bottom: 4px; }
         .temp-column-header.col-frigo { background: linear-gradient(135deg, #dbeafe, #bfdbfe); color: #1e40af; }
         .temp-column-header.col-congel { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); color: #3730a3; }
         .temp-column-header.col-chaud { background: linear-gradient(135deg, #fee2e2, #fecaca); color: #991b1b; }
+        .temp-column-header.col-cf { background: linear-gradient(135deg, #cffafe, #a5f3fc); color: #155e75; }
         .temp-input { display: flex; flex-direction: column; align-items: stretch; gap: 4px; background: #f9fafb; border-radius: 8px; padding: 8px; border: 1px solid var(--gray-200); }
         .temp-input label { font-size: 13px; font-weight: 600; }
         .temp-input-row { display: flex; align-items: center; gap: 6px; }
@@ -547,7 +561,7 @@
     <div class="category" data-cat="securite">
         <div class="category-header" onclick="togCat(this)">
             <h3><span class="cat-icon">⚠️</span> Sécurité</h3>
-            <div style="display:flex;align-items:center;gap:8px"><span class="cat-score neutral" data-score>— / 5</span><span class="chevron">▼</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><span class="cat-score neutral" data-score>— / 27</span><span class="chevron">▼</span></div>
         </div>
         <div class="category-body">
             <div class="check-list" id="list-securite"></div>
@@ -813,33 +827,60 @@ var DATA = {
     securite: {
         name: "Sécurité", icon: "⚠️",
         items: [
-            { id:"se1", label:"Sorties de secours dégagées et signalées", corrective:"Dégager immédiatement toutes les sorties de secours. Vérifier que la signalétique lumineuse fonctionne. Aucun objet ne doit obstruer le passage d'évacuation.", reasons:[{label:"Sortie obstruée", comment:"Sortie de secours obstruée constatée. Dégager immédiatement."}, {label:"Sortie non signalée", comment:"Sortie de secours non signalée constatée (signalétique éteinte). Remettre en service immédiatement."}, {label:"Sortie obstruée ET non signalée", comment:"Sortie obstruée ET non signalée constatées. Dégager et remettre en service la signalétique."}] },
-            { id:"se2", label:"Extincteurs vérifiés et accessibles", corrective:"Rendre les extincteurs accessibles immédiatement (rien devant, hauteur réglementaire). Si la vérification annuelle est expirée, contacter un organisme agréé pour une mise en conformité sous 15 jours.", reasons:[{label:"Extincteur inaccessible", comment:"Extincteur inaccessible constaté. Rendre accessible immédiatement."}, {label:"Vérification annuelle expirée", comment:"Vérification annuelle expirée constatée. Contacter un organisme agréé sous 15 jours."}, {label:"Inaccessible ET vérification expirée", comment:"Extincteur inaccessible ET vérification expirée constatés. Rendre accessible et contacter un organisme agréé."}] },
-            { id:"se3", label:"Kit de premiers secours complet", corrective:"Reconstituer le kit de premiers secours avec tous les éléments obligatoires (pansements, compresses, antiseptique, gants, ciseaux). Vérifier les dates de péremption.", reasons:[{label:"Kit incomplet", comment:"Kit de premiers secours incomplet constaté. Reconstituer avec tous les éléments obligatoires immédiatement."}, {label:"Produits périmés", comment:"Produits du kit de premiers secours périmés constatés. Remplacer immédiatement."}, {label:"Kit incomplet ET produits périmés", comment:"Kit incomplet ET produits périmés constatés. Reconstituer intégralement le kit immédiatement."}] },
-            { id:"se4", label:"Pas d'obstruction autour des équipements de cuisson", corrective:"Dégager immédiatement les abords des équipements de cuisson. Maintenir un périmètre de sécurité libre de tout objet inflammable ou encombrant.", reasons:[{label:"Objets inflammables à proximité", comment:"Objets inflammables à proximité des équipements de cuisson constatés. Retirer immédiatement."}, {label:"Zone encombrée", comment:"Zone encombrée autour des équipements de cuisson constatée. Dégager immédiatement."}, {label:"Inflammables ET zone encombrée", comment:"Objets inflammables ET zone encombrée constatés. Dégager et sécuriser le périmètre immédiatement."}] },
-            { id:"se5", label:"Systèmes électriques et gaz en bon état", corrective:"Faire vérifier l'installation électrique et gaz par un professionnel agréé. En cas de défaut constaté (fil dénudé, fuite, odeur), couper l'alimentation et faire intervenir en urgence.", reasons:[{label:"Problème électrique", comment:"Problème électrique constaté (fil dénudé, prise défectueuse). Couper si danger et faire intervenir en urgence."}, {label:"Problème gaz", comment:"Problème gaz constaté (odeur, fuite). Couper l'alimentation gaz et faire intervenir en urgence."}, {label:"Problème électrique ET gaz", comment:"Problèmes électrique ET gaz constatés. Couper les alimentations et faire intervenir en urgence."}] }
+            { id:"sc1", sector:"cuisine", label:"Cuisine — Extincteurs et couverture anti-feu vérifiés et accessibles", detail:"Date de vérification annuelle contrôlée", corrective:"Dégager immédiatement l’accès aux extincteurs. Si la vérification annuelle est dépassée, faire intervenir la société agréée sous 15 jours et conserver l’attestation à disposition.", reasons:[{label:"Accès obstrué", comment:"Accès aux extincteurs obstrué constaté. Dégager immédiatement et matérialiser la zone au sol."}, {label:"Vérification annuelle dépassée", comment:"Vérification annuelle des extincteurs dépassée constatée. Faire intervenir une société agréée sous 15 jours."}, {label:"Extincteur ou couverture manquant", comment:"Extincteur ou couverture anti-feu manquant constaté. Remplacer immédiatement et vérifier la conformité du plan d’implantation."}] },
+            { id:"sc2", sector:"cuisine", label:"Cuisine — Kit de premiers secours complet et accessible", corrective:"Recompléter le kit de premiers secours (pansements, compresses, gants, désinfectant) et retirer les produits périmés. Le placer à un emplacement connu de toute l’équipe et signalé.", reasons:[{label:"Kit incomplet", comment:"Kit de premiers secours incomplet constaté. Recompléter immédiatement et mettre en place un contrôle mensuel."}, {label:"Produits périmés", comment:"Produits périmés constatés dans le kit de premiers secours. Retirer et remplacer immédiatement."}, {label:"Kit absent ou inaccessible", comment:"Kit de premiers secours absent ou inaccessible constaté. Installer un kit complet à un emplacement signalé et connu de l’équipe."}] },
+            { id:"sc3", sector:"cuisine", label:"Cuisine — Aucune obstruction autour des équipements de cuisson", corrective:"Dégager immédiatement les abords des fours, friteuses et plaques. Aucun carton, emballage ou produit inflammable ne doit être stocké à proximité des sources de chaleur.", reasons:[{label:"Matériel ou cartons à proximité", comment:"Matériel ou cartons entreposés à proximité des équipements de cuisson constatés. Dégager immédiatement les abords."}, {label:"Produits inflammables à proximité", comment:"Produits inflammables stockés près d’une source de chaleur constatés. Déplacer immédiatement vers un local adapté."}, {label:"Circulation gênante devant les cuissons", comment:"Circulation entravée devant les postes de cuisson constatée. Libérer le passage et rappeler la consigne à l’équipe."}] },
+            { id:"sc4", sector:"cuisine", label:"Cuisine — Installations électriques et gaz en bon état", detail:"Câbles, prises, flexibles gaz et date de validité", corrective:"Faire intervenir un professionnel sous 48h sur toute installation défectueuse. Remplacer les flexibles gaz dont la date de validité est dépassée et sécuriser les câbles apparents.", reasons:[{label:"Câbles ou prises détériorés", comment:"Câbles ou prises détériorés constatés en cuisine. Faire intervenir un électricien sous 48h et condamner la zone en attendant."}, {label:"Flexible gaz périmé ou abîmé", comment:"Flexible gaz périmé ou abîmé constaté. Remplacer immédiatement par un flexible conforme et noter la date de validité."}, {label:"Multiprises ou raccordements non conformes", comment:"Multiprises ou raccordements de fortune constatés. Supprimer et faire mettre aux normes par un professionnel sous 48h."}] },
+            { id:"sc5", sector:"cuisine", label:"Cuisine — Sols secs, antidérapants et panneaux sol mouillé disponibles", corrective:"Nettoyer et sécher immédiatement les zones glissantes. Mettre à disposition des panneaux sol mouillé et rappeler le port de chaussures de sécurité antidérapantes.", reasons:[{label:"Sol glissant ou gras", comment:"Sol glissant ou gras constaté en cuisine. Nettoyer et dégraisser immédiatement, risque de chute."}, {label:"Panneaux sol mouillé absents", comment:"Panneaux de signalisation sol mouillé absents constatés. S’équiper immédiatement et les utiliser à chaque nettoyage."}, {label:"Chaussures de sécurité non portées", comment:"Chaussures de sécurité antidérapantes non portées constatées. Rappeler l’obligation à l’équipe et vérifier les dotations."}] },
+            { id:"sc6", sector:"cuisine", label:"Cuisine — Couteaux et objets tranchants rangés en sécurité", detail:"Aucune lame en vrac dans un tiroir ou un bac", corrective:"Ranger tous les couteaux sur porte-couteaux ou dans un bloc dédié. Retirer les lames abîmées et rappeler la consigne de ne jamais laisser un couteau dans un bac de plonge.", reasons:[{label:"Lames en vrac", comment:"Couteaux laissés en vrac dans un tiroir ou un bac constatés. Ranger immédiatement sur support dédié, risque de coupure."}, {label:"Couteaux abîmés ou manches cassés", comment:"Couteaux aux lames abîmées ou manches cassés constatés. Retirer du service et remplacer immédiatement."}, {label:"Couteau dans un bac de plonge", comment:"Couteau immergé dans un bac de plonge constaté. Retirer immédiatement et rappeler la consigne à l’équipe."}] },
+            { id:"sd1", sector:"depot", label:"Dépôt — Allées de circulation et accès aux issues dégagés", corrective:"Libérer immédiatement les allées et les accès aux issues. Rien ne doit être stocké au sol ni devant un tableau électrique ou un extincteur.", reasons:[{label:"Allées encombrées", comment:"Allées de circulation encombrées constatées au dépôt. Dégager immédiatement et ranger selon le plan de stockage."}, {label:"Accès à une issue ou à un équipement bloqué", comment:"Accès à une issue de secours, un tableau électrique ou un extincteur bloqué constaté. Dégager immédiatement."}, {label:"Marchandise stockée au sol", comment:"Marchandise stockée à même le sol constatée. Remonter sur étagère ou palette et rappeler la règle."}] },
+            { id:"sd2", sector:"depot", label:"Dépôt — Stockage stable, charges lourdes en partie basse", corrective:"Redescendre les charges lourdes en partie basse et sécuriser les piles instables. Ne jamais empiler au-delà de la hauteur prévue par l’étagère.", reasons:[{label:"Pile instable ou trop haute", comment:"Pile de marchandise instable ou trop haute constatée. Reprendre le rangement immédiatement, risque de chute de charge."}, {label:"Charges lourdes en hauteur", comment:"Charges lourdes stockées en hauteur constatées. Redescendre en partie basse immédiatement."}, {label:"Étagère déformée ou surchargée", comment:"Étagère déformée ou surchargée constatée. Décharger immédiatement et remplacer l’élément endommagé."}] },
+            { id:"sd3", sector:"depot", label:"Chambre froide — Ouverture de secours intérieure fonctionnelle", detail:"Test d’ouverture depuis l’intérieur effectué", corrective:"Tester l’ouverture depuis l’intérieur. En cas de défaut, faire intervenir un technicien sous 24h et interdire l’accès seul à la chambre froide en attendant la réparation.", reasons:[{label:"Ouverture intérieure défectueuse", comment:"Ouverture de secours intérieure de la chambre froide défectueuse constatée. Faire intervenir un technicien sous 24h, risque d’enfermement."}, {label:"Test non effectué ou non tracé", comment:"Test d’ouverture intérieure non effectué ou non tracé. Procéder au test et consigner la vérification par écrit."}, {label:"Poignée ou mécanisme abîmé", comment:"Poignée ou mécanisme d’ouverture abîmé constaté. Faire remplacer sous 24h."}] },
+            { id:"sd4", sector:"depot", label:"Chambre froide — Éclairage intérieur et signal d’alerte fonctionnels", corrective:"Remplacer l’éclairage défectueux et vérifier le signal d’alerte. Aucun salarié ne doit entrer en chambre froide sans éclairage en état de marche.", reasons:[{label:"Éclairage intérieur défectueux", comment:"Éclairage intérieur de la chambre froide défectueux constaté. Remplacer immédiatement."}, {label:"Signal d’alerte absent ou HS", comment:"Signal d’alerte de la chambre froide absent ou hors service constaté. Faire installer ou réparer sous 48h."}, {label:"Éclairage ET alerte défaillants", comment:"Éclairage intérieur ET signal d’alerte défaillants constatés. Interdire l’accès seul et faire intervenir un technicien sous 24h."}] },
+            { id:"sd5", sector:"depot", label:"Dépôt — Produits d’entretien stockés à part, étiquetés et fermés", corrective:"Séparer immédiatement les produits d’entretien des denrées alimentaires. Conserver les contenants d’origine étiquetés, fermés, et tenir les fiches de données de sécurité à disposition.", reasons:[{label:"Produits stockés près des denrées", comment:"Produits d’entretien stockés à proximité des denrées alimentaires constatés. Séparer immédiatement, risque de contamination chimique."}, {label:"Contenant non étiqueté ou transvasé", comment:"Produit d’entretien transvasé ou non étiqueté constaté. Jeter et reprendre les contenants d’origine étiquetés."}, {label:"Bidon ouvert ou mal fermé", comment:"Bidon de produit d’entretien ouvert ou mal fermé constaté. Refermer immédiatement et ranger dans le local dédié."}] },
+            { id:"sd6", sector:"depot", label:"Dépôt — Escabeau conforme et en bon état", detail:"Aucun usage de caisse ou de chaise comme marchepied", corrective:"Mettre à disposition un escabeau stable et en bon état. Interdire formellement l’usage de caisses, bacs ou chaises pour atteindre les hauteurs.", reasons:[{label:"Escabeau absent", comment:"Aucun escabeau disponible au dépôt constaté. S’équiper immédiatement d’un modèle conforme."}, {label:"Escabeau abîmé ou instable", comment:"Escabeau abîmé ou instable constaté. Retirer du service et remplacer immédiatement."}, {label:"Usage de caisse ou de chaise", comment:"Usage de caisses ou de chaises comme marchepied constaté. Rappeler l’interdiction à l’équipe, risque de chute de hauteur."}] },
+            { id:"ss1", sector:"salle", label:"Salle — Sorties de secours dégagées, signalées et éclairage de sécurité en état", corrective:"Dégager immédiatement les issues de secours et vérifier que les blocs d’éclairage de sécurité s’allument. Faire remplacer tout bloc défectueux sous 15 jours.", reasons:[{label:"Issue obstruée", comment:"Issue de secours obstruée constatée en salle. Dégager immédiatement, rien ne doit être entreposé devant."}, {label:"Signalétique absente ou illisible", comment:"Signalétique des issues de secours absente ou illisible constatée. Remettre en place une signalétique conforme sous 15 jours."}, {label:"Éclairage de sécurité défectueux", comment:"Bloc d’éclairage de sécurité défectueux constaté. Faire remplacer sous 15 jours."}] },
+            { id:"ss2", sector:"salle", label:"Salle — Tables et chaises sans partie coupante ni vis saillante", detail:"Chants, soudures, vis et stratifié contrôlés", corrective:"Retirer immédiatement du service tout mobilier présentant une arête coupante, un éclat ou une vis saillante. Réparer ou remplacer avant remise en salle.", reasons:[{label:"Arête coupante ou éclat", comment:"Table ou chaise présentant une arête coupante ou un éclat constatée. Retirer immédiatement du service, risque de coupure pour la clientèle."}, {label:"Vis ou fixation saillante", comment:"Vis ou fixation saillante constatée sur le mobilier de salle. Reprendre ou protéger immédiatement."}, {label:"Stratifié ou chant décollé", comment:"Stratifié ou chant décollé constaté sur une table. Réparer ou remplacer avant remise en service."}] },
+            { id:"ss3", sector:"salle", label:"Salle — Tables et chaises stables, pieds et fixations contrôlés", corrective:"Resserrer les fixations et remplacer les patins manquants. Retirer du service tout siège ou table instable jusqu’à réparation.", reasons:[{label:"Mobilier bancal", comment:"Table ou chaise bancale constatée en salle. Retirer du service et reprendre les fixations immédiatement."}, {label:"Fixations desserrées", comment:"Fixations desserrées constatées sur le mobilier de salle. Resserrer l’ensemble et instaurer un contrôle mensuel."}, {label:"Patin ou embout manquant", comment:"Patins ou embouts manquants constatés sur les pieds du mobilier. Remplacer immédiatement."}] },
+            { id:"ss4", sector:"salle", label:"Salle — Sol propre, sec et non glissant, signalisation en cas de nettoyage", corrective:"Sécher immédiatement toute zone humide et poser un panneau de signalisation pendant le nettoyage. Reprendre les revêtements décollés ou fissurés.", reasons:[{label:"Sol glissant ou humide non signalé", comment:"Sol glissant ou humide sans signalisation constaté en salle. Sécher et signaler immédiatement, risque de chute client."}, {label:"Revêtement décollé ou fissuré", comment:"Revêtement de sol décollé ou fissuré constaté. Reprendre sous 15 jours, risque de trébuchement."}, {label:"Sol sale ou encombré", comment:"Sol sale ou encombré constaté en salle. Nettoyer et dégager immédiatement."}] },
+            { id:"ss5", sector:"salle", label:"Salle — Prises, câbles et luminaires sécurisés et hors de portée des enfants", corrective:"Sécuriser ou masquer les câbles au sol, poser des cache-prises à hauteur d’enfant et faire reprendre tout luminaire mal fixé sous 48h.", reasons:[{label:"Câble apparent au sol", comment:"Câble apparent au sol constaté en salle. Sécuriser par goulotte ou passage de câble immédiatement, risque de chute."}, {label:"Prise accessible aux enfants", comment:"Prise électrique accessible aux enfants constatée. Installer des cache-prises immédiatement."}, {label:"Luminaire mal fixé ou abîmé", comment:"Luminaire mal fixé ou abîmé constaté en salle. Faire reprendre par un électricien sous 48h."}] },
+            { id:"sj1", sector:"jeux", optional:true, label:"Jeux enfants — Structure sans partie cassée, coupante ou saillante", corrective:"Condamner immédiatement l’accès à la structure en cas d’élément cassé ou coupant. Faire réparer par le fournisseur avant toute remise en service.", reasons:[{label:"Élément cassé ou fissuré", comment:"Élément cassé ou fissuré constaté sur la structure de jeux. Condamner l’accès immédiatement et faire réparer avant remise en service."}, {label:"Partie coupante ou saillante", comment:"Partie coupante ou saillante constatée sur la structure de jeux. Condamner l’accès, risque de blessure pour les enfants."}, {label:"Plastique déformé ou fragilisé", comment:"Plastique déformé ou fragilisé constaté sur la structure. Faire remplacer l’élément par le fournisseur."}] },
+            { id:"sj2", sector:"jeux", optional:true, label:"Jeux enfants — Fixations, vis et boulons serrés et protégés", corrective:"Resserrer l’ensemble des fixations et remettre en place les cache-boulons manquants. Mettre en place un contrôle mensuel tracé par écrit.", reasons:[{label:"Fixation desserrée", comment:"Fixation desserrée constatée sur la structure de jeux. Resserrer immédiatement et instaurer un contrôle mensuel tracé."}, {label:"Cache-boulon manquant", comment:"Cache-boulon manquant constaté sur la structure de jeux. Remplacer immédiatement, risque de blessure."}, {label:"Structure instable", comment:"Instabilité de la structure de jeux constatée. Condamner l’accès et faire intervenir le fournisseur sous 48h."}] },
+            { id:"sj3", sector:"jeux", optional:true, label:"Jeux enfants — Sol amortissant, tapis et protections en bon état", corrective:"Remplacer les dalles ou mousses de protection détériorées. La zone de réception doit rester intégralement couverte par un revêtement amortissant.", reasons:[{label:"Dalle ou mousse détériorée", comment:"Dalle ou mousse de protection détériorée constatée dans l’aire de jeux. Remplacer immédiatement."}, {label:"Zone de réception non couverte", comment:"Zone de réception non intégralement couverte constatée. Compléter le revêtement amortissant sous 15 jours."}, {label:"Revêtement décollé ou glissant", comment:"Revêtement décollé ou glissant constaté dans l’aire de jeux. Reprendre la pose immédiatement."}] },
+            { id:"sj4", sector:"jeux", optional:true, label:"Jeux enfants — Aire propre et désinfectée, sans petit objet ni débris", corrective:"Nettoyer et désinfecter l’aire de jeux quotidiennement. Retirer tout petit objet, débris ou reste alimentaire pouvant être avalé par un enfant.", reasons:[{label:"Aire sale ou poussiéreuse", comment:"Aire de jeux sale ou poussiéreuse constatée. Nettoyer et désinfecter immédiatement, puis instaurer un nettoyage quotidien."}, {label:"Petits objets ou débris présents", comment:"Petits objets ou débris constatés dans l’aire de jeux. Retirer immédiatement, risque d’ingestion."}, {label:"Restes alimentaires dans la structure", comment:"Restes alimentaires constatés dans la structure de jeux. Nettoyer en profondeur et interdire la nourriture dans l’aire."}] },
+            { id:"sj5", sector:"jeux", optional:true, label:"Jeux enfants — Consignes d’âge et d’utilisation affichées", detail:"Surveillance parentale rappelée", corrective:"Afficher à l’entrée de l’aire les consignes d’utilisation, la tranche d’âge autorisée et le rappel de la surveillance parentale obligatoire.", reasons:[{label:"Consignes absentes", comment:"Consignes d’utilisation de l’aire de jeux absentes constatées. Afficher immédiatement à l’entrée de la zone."}, {label:"Tranche d’âge non indiquée", comment:"Tranche d’âge autorisée non indiquée constatée. Afficher la limite d’âge prévue par le fabricant."}, {label:"Affichage dégradé ou illisible", comment:"Affichage des consignes dégradé ou illisible constaté. Remplacer le panneau immédiatement."}] },
+            { id:"st1", sector:"terrasse", optional:true, label:"Terrasse — Mobilier extérieur en bon état, sans partie coupante ni rouille", corrective:"Retirer du service le mobilier rouillé ou présentant une arête coupante. Traiter ou remplacer avant remise en terrasse.", reasons:[{label:"Mobilier rouillé", comment:"Mobilier de terrasse rouillé constaté. Traiter ou remplacer avant remise en service."}, {label:"Arête coupante ou vis saillante", comment:"Arête coupante ou vis saillante constatée sur le mobilier de terrasse. Retirer immédiatement du service."}, {label:"Mobilier bancal ou instable", comment:"Mobilier de terrasse bancal constaté. Reprendre les fixations ou remplacer immédiatement."}] },
+            { id:"st2", sector:"terrasse", optional:true, label:"Terrasse — Parasols et stores lestés, arrimés et repliés par grand vent", corrective:"Vérifier le lestage et l’arrimage de chaque parasol. Rappeler à l’équipe la consigne de repliage systématique en cas de vent ou à la fermeture.", reasons:[{label:"Lestage insuffisant", comment:"Lestage des parasols insuffisant constaté. Compléter immédiatement, risque de basculement."}, {label:"Arrimage ou mécanisme défectueux", comment:"Arrimage ou mécanisme de parasol défectueux constaté. Réparer ou retirer du service immédiatement."}, {label:"Consigne de repliage non appliquée", comment:"Consigne de repliage par grand vent non appliquée constatée. Rappeler la procédure à l’équipe et l’afficher au poste."}] },
+            { id:"st3", sector:"terrasse", optional:true, label:"Terrasse — Sol plat, sans dalle descellée ni dénivelé dangereux", corrective:"Reprendre les dalles descellées et signaler tout dénivelé. Neutraliser la zone dangereuse tant que la réparation n’est pas faite.", reasons:[{label:"Dalle descellée ou fissurée", comment:"Dalle descellée ou fissurée constatée en terrasse. Reprendre sous 15 jours et neutraliser la zone en attendant."}, {label:"Dénivelé non signalé", comment:"Dénivelé non signalé constaté en terrasse. Matérialiser immédiatement, risque de chute client."}, {label:"Sol glissant", comment:"Sol de terrasse glissant constaté. Nettoyer et traiter la surface, signaler la zone."}] },
+            { id:"st4", sector:"terrasse", optional:true, label:"Terrasse — Délimitation et séparation de la voirie conformes et stables", corrective:"Remettre en place les éléments de délimitation manquants ou instables, conformément à l’autorisation d’occupation du domaine public.", reasons:[{label:"Délimitation absente ou incomplète", comment:"Délimitation de la terrasse absente ou incomplète constatée. Rétablir conformément à l’autorisation d’occupation."}, {label:"Élément instable ou renversé", comment:"Élément de délimitation instable ou renversé constaté. Sécuriser immédiatement, terrasse en bordure de voirie."}, {label:"Empiètement sur le passage piéton", comment:"Empiètement de la terrasse sur le passage piéton constaté. Repositionner le mobilier dans les limites autorisées."}] },
+            { id:"st5", sector:"terrasse", optional:true, label:"Terrasse — Éclairages, câbles et appareils extérieurs sécurisés", corrective:"Sécuriser les câbles extérieurs et vérifier que les appareils sont adaptés à un usage extérieur. Faire intervenir un électricien sous 48h sur toute installation douteuse.", reasons:[{label:"Câble apparent ou non protégé", comment:"Câble apparent ou non protégé constaté en terrasse. Sécuriser immédiatement, risque de chute et d’électrisation."}, {label:"Matériel non adapté à l’extérieur", comment:"Matériel électrique non adapté à un usage extérieur constaté. Remplacer par du matériel conforme sous 48h."}, {label:"Chauffage extérieur mal sécurisé", comment:"Chauffage extérieur mal sécurisé ou trop proche de matières inflammables constaté. Éloigner et sécuriser immédiatement."}] }
         ]
     }
 };
 
 var TEMPS = [
-    // --- Frigos (0 à 10°C) ---
-    { id:"t14", label:"Ch. froide positive", type:"pos", group:"frigos" },
-    { id:"t1", label:"Frigo pizza", type:"pos", group:"frigos" },
-    { id:"t5", label:"Frigo boisson", type:"pos", group:"frigos" },
-    { id:"t6", label:"Frigo dessert", type:"pos", group:"frigos" },
-    { id:"t8", label:"Frigo 1", type:"pos", group:"frigos" },
-    { id:"t9", label:"Frigo 2", type:"pos", group:"frigos" },
-    { id:"t2", label:"Saladette pizza", type:"pos", group:"frigos" },
-    { id:"t3", label:"Saladette tacos", type:"pos", group:"frigos" },
-    // --- Congélateurs (-20 à 0°C) ---
-    { id:"t15", label:"Ch. froide négative", type:"neg", group:"congelateurs" },
-    { id:"t4", label:"Congélateur frite", type:"neg", group:"congelateurs" },
-    { id:"t12", label:"Congélateur 1", type:"neg", group:"congelateurs" },
-    { id:"t13", label:"Congélateur 2", type:"neg", group:"congelateurs" },
-    // --- Chaud (0 à 90°C) ---
-    { id:"t7", label:"Bain-marie tacos", type:"hot", group:"chaud" },
-    { id:"t16", label:"Bain-marie pizza", type:"hot", group:"chaud" }
+    // --- Frigos et saladettes (0 à 4°C) ---
+    { id:"f1", label:"Frigo pizza", type:"pos", group:"frigos" },
+    { id:"f2", label:"Saladette pizza", type:"pos", group:"frigos" },
+    { id:"f3", label:"Frigo tacos 1", type:"pos", group:"frigos" },
+    { id:"f4", label:"Frigo tacos 2", type:"pos", group:"frigos" },
+    { id:"f5", label:"Frigo burger 1", type:"pos", group:"frigos" },
+    { id:"f6", label:"Frigo burger 2", type:"pos", group:"frigos" },
+    { id:"f7", label:"Saladette tacos", type:"pos", group:"frigos" },
+    { id:"f8", label:"Saladette burgers", type:"pos", group:"frigos" },
+    { id:"f9", label:"Frigo boisson 1", type:"pos", group:"frigos" },
+    { id:"f10", label:"Frigo boisson 2", type:"pos", group:"frigos" },
+    { id:"f11", label:"Frigo dessert", type:"pos", group:"frigos" },
+    // --- Congélateurs (-22 à -16°C) ---
+    { id:"n1", label:"Congélateur frite", type:"neg", group:"congelateurs" },
+    { id:"n2", label:"Congélateur 2", type:"neg", group:"congelateurs" },
+    { id:"n3", label:"Congélateur smoothies", type:"neg", group:"congelateurs" },
+    // --- Chambres froides ---
+    { id:"cf1", label:"Chambre froide positive", type:"pos", group:"chambres" },
+    { id:"cf2", label:"Chambre froide négative", type:"neg", group:"chambres" },
+    // --- Bain-marie (≥ 63°C) ---
+    { id:"bm1", label:"Bain-marie tacos", type:"hot", group:"chaud" },
+    { id:"bm2", label:"Bain-marie pizza", type:"hot", group:"chaud" }
 ];
 
 /* ===== Coins optionnels : certains etablissements n'ont pas tous les postes ===== */
@@ -900,6 +941,92 @@ function applyStoreCoins() {
     });
 }
 
+/* ===== Indicateurs de performance par domaine ===== */
+var KPI_GROUPS = [
+    { name: 'Service & expérience client', cats: ['service'], temps: false },
+    { name: 'Hygiène & propreté', cats: ['hygiene'], temps: false },
+    { name: 'Relevé de températures', cats: [], temps: true },
+    { name: 'Coins de production', cats: ['tacos', 'pizzas', 'burgers', 'desserts'], temps: false },
+    { name: 'Sécurité', cats: ['securite'], temps: false },
+    { name: 'Dépôt & chaîne du froid', cats: ['depot'], temps: false }
+];
+
+function computeKpis() {
+    return KPI_GROUPS.map(function(g) {
+        var c = 0, n = 0;
+        g.cats.forEach(function(catKey) {
+            if (!DATA[catKey] || !isCatActive(catKey)) return;
+            activeItems(catKey).forEach(function(item) {
+                var checked = document.querySelector('input[name="' + item.id + '"]:checked');
+                if (!checked) return;
+                n++; if (checked.value === 'C') c++;
+            });
+        });
+        if (g.temps) {
+            TEMPS.forEach(function(t) {
+                var v = document.getElementById('temp-' + t.id);
+                if (!v || !v.value) return;
+                var val = parseFloat(v.value);
+                if (isNaN(val)) return;
+                var ok = (t.type === 'pos') ? (val >= 0 && val <= 4) : (t.type === 'neg') ? (val >= -22 && val <= -16) : (val >= 63);
+                n++; if (ok) c++;
+            });
+        }
+        return { name: g.name, conforme: c, evalue: n, pct: n > 0 ? Math.round(c / n * 100) : null };
+    });
+}
+
+function kpiColor(pct) { return pct >= 80 ? '#059669' : pct >= 50 ? '#d97706' : '#e60000'; }
+
+function buildKpiHtml() {
+    var html = '<div class="rpt-kpis">';
+    computeKpis().forEach(function(k) {
+        if (k.pct === null) {
+            html += '<div class="rpt-kpi"><div class="k-val" style="color:#bbb">—</div><div class="k-sub">non applicable</div><div class="k-name">' + k.name + '</div><div class="k-bar"><span style="width:0"></span></div></div>';
+        } else {
+            var col = kpiColor(k.pct);
+            html += '<div class="rpt-kpi"><div class="k-val" style="color:' + col + '">' + k.pct + '%</div><div class="k-sub">' + k.conforme + '/' + k.evalue + ' conformes</div><div class="k-name">' + k.name + '</div><div class="k-bar"><span style="width:' + k.pct + '%;background:' + col + '"></span></div></div>';
+        }
+    });
+    return html + '</div>';
+}
+
+var SECTORS = {
+    cuisine: { label: "🔥 Sécurité en cuisine", optional: false },
+    depot: { label: "🧊 Sécurité dépôt & chambre froide", optional: false },
+    salle: { label: "🪑 Sécurité salle", optional: false },
+    jeux: { label: "🎠 Sécurité jeux pour enfants", optional: true },
+    terrasse: { label: "☀️ Sécurité terrasse", optional: true }
+};
+
+function sectorItemIds(sec) {
+    var out = [];
+    Object.keys(DATA).forEach(function(k) { DATA[k].items.forEach(function(i) { if (i.sector === sec) out.push(i.id); }); });
+    return out;
+}
+
+function applySectorState(sec) {
+    var ids = sectorItemIds(sec);
+    var on = ids.some(function(id) { return isItemActive(id); });
+    var head = document.getElementById('sector-head-' + sec);
+    if (head) {
+        if (on) head.classList.remove('sector-off'); else head.classList.add('sector-off');
+        var lb = head.querySelector('.switch-label');
+        if (lb) lb.textContent = on ? 'Présent' : 'Absent';
+    }
+    var cb = document.getElementById('sector-toggle-' + sec);
+    if (cb) cb.checked = on;
+}
+
+function toggleSector(sec, on) {
+    sectorItemIds(sec).forEach(function(id) { setItemActive(id, on, true); });
+    applySectorState(sec);
+}
+
+function applyAllSectorStates() {
+    Object.keys(SECTORS).forEach(function(sec) { if (SECTORS[sec].optional) applySectorState(sec); });
+}
+
 /* ===== Points optionnels : equipements que tous les magasins n'ont pas ===== */
 var DISABLED_ITEMS = {};
 
@@ -911,10 +1038,15 @@ function optionalItemIds() {
     return out;
 }
 function inactiveItemLabels() {
-    var out = [];
+    var out = [], seen = {};
     Object.keys(DATA).forEach(function(k) {
         if (!isCatActive(k)) return;
-        DATA[k].items.forEach(function(i) { if (i.optional && !isItemActive(i.id)) out.push(i.label); });
+        DATA[k].items.forEach(function(i) {
+            if (!i.optional || isItemActive(i.id)) return;
+            var sec = i.sector && SECTORS[i.sector] && SECTORS[i.sector].optional ? i.sector : null;
+            if (sec) { if (!seen[sec]) { seen[sec] = 1; out.push(SECTORS[sec].label); } }
+            else out.push(i.label);
+        });
     });
     return out;
 }
@@ -966,6 +1098,7 @@ function applyStoreItems() {
         var on = (prefs[id] === undefined) ? true : !!prefs[id];
         setItemActive(id, on, false);
     });
+    applyAllSectorStates();
 }
 
 var photoStore = {};
@@ -978,11 +1111,22 @@ function buildCheckItems() {
         var list = document.getElementById('list-' + catKey);
         if (!list) return;
         list.innerHTML = '';
+        var lastSector = null;
         cat.items.forEach(function(item) {
+            if (item.sector && item.sector !== lastSector) {
+                lastSector = item.sector;
+                var sec = SECTORS[item.sector] || { label: item.sector, optional: false };
+                list.innerHTML += '<div class="sector-head" id="sector-head-' + item.sector + '">' +
+                    '<span class="sector-name">' + sec.label + '</span>' +
+                    (sec.optional ? '<label class="item-toggle" title="D\u00e9sactivez si l\u2019\u00e9tablissement n\u2019en dispose pas">' +
+                        '<input type="checkbox" id="sector-toggle-' + item.sector + '" checked onchange="toggleSector(\'' + item.sector + '\', this.checked)">' +
+                        '<span class="switch"></span><span class="switch-label">Pr\u00e9sent</span></label>' : '') +
+                    '</div>';
+            }
             list.innerHTML +=
                 '<div class="check-item" id="row-' + item.id + '">' +
                     '<div class="item-label">' + item.label + (item.detail ? '<span class="sub-detail">' + item.detail + '</span>' : '') + '</div>' +
-                    (item.optional ? '<label class="item-toggle" title="D\u00e9sactivez si l\u2019\u00e9tablissement n\u2019en dispose pas">' + '<input type="checkbox" id="item-toggle-' + item.id + '" checked onchange="toggleItem(\'' + item.id + '\', this.checked)">' + '<span class="switch"></span><span class="switch-label">Pr\u00e9sent</span></label>' : '') +
+                    (item.optional && !(item.sector && SECTORS[item.sector] && SECTORS[item.sector].optional) ? '<label class="item-toggle" title="D\u00e9sactivez si l\u2019\u00e9tablissement n\u2019en dispose pas">' + '<input type="checkbox" id="item-toggle-' + item.id + '" checked onchange="toggleItem(\'' + item.id + '\', this.checked)">' + '<span class="switch"></span><span class="switch-label">Pr\u00e9sent</span></label>' : '') +
                     '<div class="radio-group">' +
                         '<label class="radio-btn conforme"><input type="radio" name="' + item.id + '" value="C" onchange="updateScores(); handleRadioChange(\'' + item.id + '\')"> ✅</label>' +
                         '<label class="radio-btn non-conforme"><input type="radio" name="' + item.id + '" value="NC" onchange="updateScores(); handleRadioChange(\'' + item.id + '\')"> <span style="color:#e60000">✖</span></label>' +
@@ -1103,23 +1247,25 @@ function buildTempItem(t) {
 
 function buildTempFields() {
     var c = document.getElementById('temp-fields');
-    var frigos = TEMPS.filter(function(t) { return t.type === 'pos'; });
-    var congels = TEMPS.filter(function(t) { return t.type === 'neg'; });
-    var chauds = TEMPS.filter(function(t) { return t.type === 'hot'; });
+    var inGroup = function(g) {
+        return TEMPS.filter(function(t) {
+            var tg = t.group || (t.type === 'pos' ? 'frigos' : t.type === 'neg' ? 'congelateurs' : 'chaud');
+            return tg === g;
+        });
+    };
+    var cols = [
+        { g: 'frigos',       cls: 'col-frigo',  title: '❄️ Frigos & saladettes (0 à 4°C)' },
+        { g: 'congelateurs', cls: 'col-congel', title: '🧊 Congélateurs (-22 à -16°C)' },
+        { g: 'chambres',     cls: 'col-cf',     title: '🚪 Chambres froides' },
+        { g: 'chaud',        cls: 'col-chaud',  title: '🔥 Bain-marie (≥ 63°C)' }
+    ];
 
     var html = '';
-    // Colonne Frigos
-    html += '<div class="temp-column"><div class="temp-column-header col-frigo">❄️ Frigos (0 à 10°C)</div>';
-    frigos.forEach(function(t) { html += buildTempItem(t); });
-    html += '</div>';
-    // Colonne Congélateurs
-    html += '<div class="temp-column"><div class="temp-column-header col-congel">🧊 Congélateurs (-20 à 0°C)</div>';
-    congels.forEach(function(t) { html += buildTempItem(t); });
-    html += '</div>';
-    // Colonne Bain-marie
-    html += '<div class="temp-column"><div class="temp-column-header col-chaud">🔥 Bain-marie (≥63°C)</div>';
-    chauds.forEach(function(t) { html += buildTempItem(t); });
-    html += '</div>';
+    cols.forEach(function(col) {
+        html += '<div class="temp-column"><div class="temp-column-header ' + col.cls + '">' + col.title + '</div>';
+        inGroup(col.g).forEach(function(t) { html += buildTempItem(t); });
+        html += '</div>';
+    });
 
     c.innerHTML = html;
 }
@@ -1294,9 +1440,8 @@ function addTemp() {
     var savedVals = saveTempValues();
     customCounter++; var id = 'tcustom' + customCounter;
     var tempType = document.getElementById('add-temp-type').value;
-    var t = { id: id, label: name, type: tempType };
+    var t = { id: id, label: name, type: tempType, group: (tempType === 'pos' ? 'frigos' : tempType === 'neg' ? 'congelateurs' : 'chaud') };
     TEMPS.push(t);
-    saveTemps(TEMPS);
     buildTempFields();
     restoreTempValues(savedVals);
     n.value = '';
@@ -1663,7 +1808,7 @@ function generateReport() {
             '<div class="rpt-meta-item"><div class="label">Non conformes</div><div class="value" style="color:var(--red)">' + totalNC + '</div></div>' +
         '</div>' +
         '<div class="rpt-score-box"><div class="score-circle ' + globalCls + '">' + globalPct + '%<small>' + totalC + '/' + evaluated + '</small></div><div class="rpt-verdict" style="color:var(--' + clr2 + ')">' + verdict + '</div></div>' +
-        catHtml + tempHtml;
+        buildKpiHtml() + catHtml + tempHtml;
     if (globalComment) html += '<div class="rpt-cat"><h4>💬 Commentaire général</h4><p style="font-size:14px;line-height:1.6">' + globalComment + '</p></div>';
     if (nonConformes.length > 0) { html += '<div class="rpt-nc-summary"><h4>⚠️ Résumé des Non-Conformités (' + nonConformes.length + ')</h4>'; nonConformes.forEach(function(nc) { html += '<div class="rpt-nc-item"><strong>' + nc.cat + '</strong> — ' + nc.label + (nc.comment ? '<br><em style="color:var(--gray-500)">→ ' + nc.comment + '</em>' : '') + '</div>'; }); html += '</div>'; }
     html += '</div>';
@@ -1694,6 +1839,15 @@ function generateMailVersion(storeName, storeAddr, storeSiren, inspector, dateSt
     s += '<strong style="font-size:16px;color:' + scoreColor + '">Score global : ' + globalPct + '% — ' + verdict + '</strong><br>';
     s += 'Conformes : <strong style="color:#059669">' + totalC + '/' + totalItems + '</strong> | Non conformes : <strong style="color:#e60000">' + totalNC + '</strong>';
     s += '</div>';
+
+    var kpiRows = '';
+    computeKpis().forEach(function(k) {
+        var val = (k.pct === null) ? '<span style="color:#999">non applicable</span>'
+            : '<strong style="color:' + kpiColor(k.pct) + '">' + k.pct + '%</strong> <span style="color:#777">(' + k.conforme + '/' + k.evalue + ')</span>';
+        kpiRows += '<tr><td style="padding:4px 10px 4px 0;font-size:13px;color:#374151">' + k.name + '</td><td style="padding:4px 0;font-size:13px;text-align:right">' + val + '</td></tr>';
+    });
+    s += '<p style="font-size:14px;font-weight:700;margin:18px 0 4px">Indicateurs de performance</p>';
+    s += '<table style="width:100%;border-collapse:collapse;margin-bottom:10px">' + kpiRows + '</table>';
 
     var naMailItems = inactiveItemLabels();
     if (naMailItems.length > 0) {
@@ -2021,6 +2175,7 @@ function resetForm() {
     });
     OPTIONAL_CATS.forEach(function(k) { setCatActive(k, true, false); });
     optionalItemIds().forEach(function(id) { setItemActive(id, true, false); });
+    applyAllSectorStates();
     document.querySelectorAll('.category.open').forEach(function(c) { c.classList.remove('open'); });
     document.getElementById('report-wrap').classList.remove('visible');
     updateScores(); window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2156,7 +2311,7 @@ document.addEventListener('click', function(e) {
 function rebuildAllCheckItems() {
     Object.keys(DATA).forEach(function(k) { var l = document.getElementById('list-' + k); if (l) l.innerHTML = '';
         var s = document.querySelector('[data-cat="' + k + '"] [data-score]'); if (s) s.textContent = '— / ' + activeItems(k).length;
-    }); photoStore = {}; buildCheckItems(); optionalItemIds().forEach(function(id) { applyItemState(id); }); updateScores();
+    }); photoStore = {}; buildCheckItems(); optionalItemIds().forEach(function(id) { applyItemState(id); }); applyAllSectorStates(); updateScores();
 }
 
 function openSettings() { document.getElementById('settings-modal').classList.add('open'); document.body.style.overflow = 'hidden'; renderSettingsStores(); renderSettingsInspectors(); renderSettingsControls(); populateCpCategorySelect(); }
@@ -2209,6 +2364,7 @@ function initApp() {
     var now = new Date(); document.getElementById('ctrl-time').value = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
     buildCheckItems(); buildTempFields();
     optionalItemIds().forEach(function(id) { applyItemState(id); });
+    applyAllSectorStates();
     updateScores();
 }
 
